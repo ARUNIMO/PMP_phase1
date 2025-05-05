@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from 'react';
 import { motion, useScroll, useAnimation, useTransform } from 'framer-motion';
 import { ArrowRight, Calendar, MessageCircle, Search, Users } from 'lucide-react';
@@ -40,39 +39,39 @@ const Index = () => {
   const featuredTurfs = [
     {
       id: '1',
-      name: 'Green Valley Stadium',
-      location: 'T. Nagar, Chennai',
+      name: 'Foot Work',
+      location: 'Kallimadai, Coimbatore',
       rating: 4.8,
-      imageUrl: 'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=800&q=80',
+      imageUrl: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4npFDLq_ymnmxbwTpTSgxmmk3vokbpjmfGCDicIWv4DV3FaIp_ds57eVCJjnH8kPwNB9bEackwj7TgmolKkoOzMjpgf2httzmFCFpOKsy4KWCSSLSUpX5Qz4AZeeWz_VBCWMfQCABQ=s0',
       price: 1500,
-      sportTypes: ['Football', 'Rugby'],
+      sportTypes: ['Football'],
     },
     {
       id: '2',
-      name: 'Urban Sports Arena',
-      location: 'Anna Nagar, Chennai',
+      name: 'Sports Training & Fitness Unit',
+      location: 'Koundampalayam, Coimbatore',
       rating: 4.6,
-      imageUrl: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&q=80',
-      price: 1800,
-      sportTypes: ['Football', 'Basketball'],
+      imageUrl: 'https://lh3.googleusercontent.com/p/AF1QipM0tpJkCZj8tusXgafhjxaqPcxoBGJoJI55X3-1',
+      price: 1400,
+      sportTypes: ['Football', 'Basketball','Frisbee','Crossfit'],
     },
     {
       id: '3',
-      name: 'Central Cricket Ground',
-      location: 'Coimbatore',
-      rating: 4.9,
-      imageUrl: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&q=80',
-      price: 2200,
-      sportTypes: ['Cricket'],
+      name: 'Tiki Taka',
+      location: 'T.Nagar, Chennai',
+      rating: 4.7,
+      imageUrl: 'https://lh3.googleusercontent.com/p/AF1QipP9ITtkorTsrLbWsHt6BUxS2GeguxK5n-S1jdjZ',
+      price: 1500,
+      sportTypes: ['Cricket','Football'],
     },
     {
       id: '4',
-      name: 'Tennis Paradise',
-      location: 'Adyar, Chennai',
-      rating: 4.7,
-      imageUrl: 'https://images.unsplash.com/photo-1622279457486-28f993f78ade?w=800&q=80',
-      price: 1200,
-      sportTypes: ['Tennis', 'Badminton'],
+      name: 'Game On Sports Arena',
+      location: 'Egmore, Chennai',
+      rating: 4.8,
+      imageUrl: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqVVijXJ2gXawJVrgpeXRKCSnI3rF-xUPRSd1X17X94VJ-gzO4xLqQBmA13fFNaSJNsFM2kBTAW7tE-Q2qVriYzCuiiB7oNeDHxHhQNSvsUbSv06A-1bee1roou1oBinNrQ3iw1',
+      price: 1500,
+      sportTypes: ['Cricket', 'Football'],
     },
   ];
 
@@ -177,22 +176,11 @@ const Index = () => {
             </motion.div>
           </motion.div>
 
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-            initial="hidden"
-            animate={controls}
-            variants={containerVariants}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredTurfs.map((turf, index) => (
-              <motion.div 
-                key={turf.id}
-                variants={itemVariants}
-                whileHover={{ y: -10, transition: { duration: 0.2 } }}
-              >
-                <TurfCard {...turf} />
-              </motion.div>
+              <TurfCard key={turf.id} {...turf} index={index} />
             ))}
-          </motion.div>
+          </div>
 
           <motion.div 
             className="mt-8 text-center md:hidden"
@@ -309,7 +297,7 @@ const Index = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-gradient-to-r from-turf-700 to-sport-700 text-white">
+      <section className="py-16 bg-gradient-to-r from-turf-700 to-sport-700 text-white font-sans">
         <div className="container">
           <motion.div 
             className="max-w-3xl mx-auto text-center"
@@ -322,22 +310,30 @@ const Index = () => {
             <p className="text-lg mb-8 text-white/90">
               Join thousands of sports enthusiasts across Tamil Nadu who book their perfect playing field with PickMyPitch.
             </p>
-            <motion.div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <motion.div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+            <Button 
+              size="lg" 
+              className="bg-white text-turf-700 hover:bg-turf-100 font-semibold tracking-wide shadow-lg hover:shadow-glow transition-all duration-300"
+              asChild
+            >
+            <Link to="/book-turf">
+              Book Now
+            </Link>
+          </Button>
+        </motion.div>
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button size="lg" className="bg-white text-turf-700 hover:bg-gray-100 shadow-lg btn-hover-glow" asChild>
-                  <Link to="/book-turf">
-                    Book Now
-                  </Link>
-                </Button>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 shadow-lg" asChild>
+                <Button 
+                  size="lg" 
+                  className="bg-white text-turf-700 hover:bg-turf-100 font-semibold tracking-wide shadow-lg hover:shadow-glow transition-all duration-300"
+                  asChild
+                >
                   <Link to="/contact">
                     Contact Us
                   </Link>

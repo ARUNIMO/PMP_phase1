@@ -310,7 +310,7 @@ const BookTurf = () => {
             <TabsContent value="grid" className="mt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {displayedTurfs.map((turf, index) => (
-                  <TurfCard key={turf.id} {...turf} />
+                  <TurfCard key={turf.id} {...turf} index={index} />
                 ))}
               </div>
             </TabsContent>

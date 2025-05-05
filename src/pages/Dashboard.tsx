@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -34,29 +33,29 @@ const Dashboard = () => {
     },
   ];
 
-  // Sample data for recommended turfs
+  // Sample data for recommended turfs (updated with INR prices and Indian locations)
   const recommendedTurfs = [
     {
       id: '1',
       name: 'Green Valley Stadium',
-      location: 'Downtown, Athletic City',
+      location: 'T. Nagar, Chennai',
       rating: 4.8,
       imageUrl: 'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=800&q=80',
-      price: 45,
+      price: 3735, // $45 * 83
       sportTypes: ['Football', 'Rugby'],
     },
     {
       id: '3',
       name: 'Central Cricket Ground',
-      location: 'Midtown, Athletic City',
+      location: 'Coimbatore',
       rating: 4.9,
       imageUrl: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&q=80',
-      price: 55,
+      price: 4565, // $55 * 83
       sportTypes: ['Cricket'],
     },
   ];
 
-  // Sample data for booking stats
+  // Sample data for booking stats (updated Total Spent to INR)
   const stats = [
     {
       title: 'Total Bookings',
@@ -81,9 +80,9 @@ const Dashboard = () => {
     },
     {
       title: 'Total Spent',
-      value: '$435',
+      value: '₹36105', // $435 * 83
       icon: <Pocket className="h-6 w-6 text-amber-500" />,
-      change: '+$85',
+      change: '+₹7055', // $85 * 83
       trend: 'up',
     },
   ];
@@ -196,8 +195,8 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {recommendedTurfs.map((turf) => (
-              <TurfCard key={turf.id} {...turf} />
+            {recommendedTurfs.map((turf, idx) => (
+              <TurfCard key={turf.id} {...turf} index={idx} />
             ))}
           </div>
         </div>

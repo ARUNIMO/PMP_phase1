@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Users, Calendar, Heart, MapPin, Target, Shield, Star } from 'lucide-react';

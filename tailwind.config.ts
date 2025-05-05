@@ -19,6 +19,9 @@ export default {
 			}
 		},
 		extend: {
+			boxShadow: {
+				'glow': '0 0 20px 0 rgba(72, 187, 120, 0.5)',
+  			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
