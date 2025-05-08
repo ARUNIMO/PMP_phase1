@@ -16,42 +16,42 @@ const Features = () => {
 
   const featuresList = [
     {
-      icon: <Calendar className="h-8 w-8 text-turf-600" />,
+      icon: <Calendar className="h-8 w-8 text-turf-600 dark:text-turf-400" />,
       title: 'Easy Booking',
       description: 'Book your favorite turf in just a few clicks, anytime, anywhere in Tamil Nadu.',
     },
     {
-      icon: <Clock className="h-8 w-8 text-turf-600" />,
+      icon: <Clock className="h-8 w-8 text-turf-600 dark:text-turf-400" />,
       title: 'Real-time Availability',
       description: 'See available slots in real-time and secure your spot instantly.',
     },
     {
-      icon: <CreditCard className="h-8 w-8 text-turf-600" />,
+      icon: <CreditCard className="h-8 w-8 text-turf-600 dark:text-turf-400" />,
       title: 'Secure Payments',
       description: 'Multiple payment options with secure and transparent transactions.',
     },
     {
-      icon: <MapPin className="h-8 w-8 text-turf-600" />,
+      icon: <MapPin className="h-8 w-8 text-turf-600 dark:text-turf-400" />,
       title: 'Location-based Search',
       description: 'Find turfs near you with our smart location-based search across Tamil Nadu.',
     },
     {
-      icon: <Shield className="h-8 w-8 text-turf-600" />,
+      icon: <Shield className="h-8 w-8 text-turf-600 dark:text-turf-400" />,
       title: 'Verified Venues',
       description: 'All our turfs are verified for quality and amenities.',
     },
     {
-      icon: <Star className="h-8 w-8 text-turf-600" />,
+      icon: <Star className="h-8 w-8 text-turf-600 dark:text-turf-400" />,
       title: 'Ratings & Reviews',
       description: 'Make informed decisions based on genuine user feedback.',
     },
     {
-      icon: <MessageCircle className="h-8 w-8 text-turf-600" />,
+      icon: <MessageCircle className="h-8 w-8 text-turf-600 dark:text-turf-400" />,
       title: 'Instant Confirmation',
       description: 'Get booking confirmations and updates instantly.',
     },
     {
-      icon: <Zap className="h-8 w-8 text-turf-600" />,
+      icon: <Zap className="h-8 w-8 text-turf-600 dark:text-turf-400" />,
       title: 'Special Offers',
       description: 'Enjoy exclusive discounts and offers on regular bookings.',
     },
@@ -114,11 +114,11 @@ const Features = () => {
   };
 
   return (
-    <section id="features" className="py-12 md:py-16 bg-gray-50">
+    <section id="features" className="py-12 md:py-16 bg-gray-50 dark:bg-dark-theme-lighter">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose PickMyPitch?</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">Why Choose PickMyPitch?</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             We offer a seamless booking experience with premium features 
             designed to make your sporting experience exceptional.
           </p>
@@ -127,11 +127,11 @@ const Features = () => {
         <div className="relative max-w-6xl mx-auto" ref={sliderRef}>
           {showLeftArrow && (
             <button
-              className="absolute left-[-60px] top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-gray-100 z-10"
+              className="absolute left-[-60px] top-1/2 -translate-y-1/2 bg-white dark:bg-dark-theme p-3 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-dark-theme-lighter z-10"
               onClick={handlePrev}
               aria-label="Previous feature"
             >
-              <ChevronLeft size={28} />
+              <ChevronLeft size={28} className="text-gray-800 dark:text-gray-200" />
             </button>
           )}
 
@@ -144,7 +144,7 @@ const Features = () => {
                 right: totalCardWidth,
               }}
               onDragEnd={handleDragEnd}
-              className="flex gap-2 cursor-grab active:cursor-grabbing" // Reduced gap-4 to gap-2
+              className="flex gap-2 cursor-grab active:cursor-grabbing"
             >
               {featuresList.map((feature, index) => {
                 const cardScale = useTransform(x, (currentX) => {
@@ -162,13 +162,13 @@ const Features = () => {
                       scale: cardScale,
                       height: CARD_HEIGHT,
                     }}
-                    className="w-[500px] flex-shrink-0 bg-white p-8 rounded-xl shadow-lg border border-gray-100 flex flex-col items-center text-center justify-center"
+                    className="w-[500px] flex-shrink-0 bg-white dark:bg-dark-theme-lighter p-8 rounded-xl shadow-lg border border-gray-100 dark:border-gray-600 flex flex-col items-center text-center justify-center"
                   >
-                    <div className="mb-6 p-4 bg-turf-50 rounded-full">
+                    <div className="mb-6 p-4 bg-turf-50 dark:bg-dark-theme-lightest rounded-full">
                       {feature.icon}
                     </div>
-                    <h3 className="text-2xl font-semibold mb-4">{feature.title}</h3>
-                    <p className="text-gray-600 text-lg px-4">{feature.description}</p>
+                    <h3 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">{feature.title}</h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-lg px-4">{feature.description}</p>
                   </motion.div>
                 );
               })}
@@ -177,11 +177,11 @@ const Features = () => {
 
           {showRightArrow && (
             <button
-              className="absolute right-[-60px] top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-gray-100 z-10"
+              className="absolute right-[-60px] top-1/2 -translate-y-1/2 bg-white dark:bg-dark-theme p-3 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-dark-theme-lighter z-10"
               onClick={handleNext}
               aria-label="Next feature"
             >
-              <ChevronRight size={28} />
+              <ChevronRight size={28} className="text-gray-800 dark:text-gray-200" />
             </button>
           )}
         </div>

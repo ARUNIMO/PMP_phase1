@@ -2,7 +2,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
-	darkMode: ["class"],
+	darkMode: 'class',
 	content: [
 		"./pages/**/*.{ts,tsx}",
 		"./components/**/*.{ts,tsx}",
@@ -23,6 +23,11 @@ export default {
 				'glow': '0 0 20px 0 rgba(72, 187, 120, 0.5)',
   			},
 			colors: {
+				'dark-theme': {
+					DEFAULT: '#00001a', // Main dark theme color
+          			lighter: '#1a1a2e', // Slightly lighter for contrast (e.g., cards)
+          			lightest: '#33334d',
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',

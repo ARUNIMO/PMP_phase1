@@ -14,70 +14,87 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import TurfCard from '@/components/TurfCard';
 import BookingCalendar from '@/components/BookingCalendar';
 
 const allTurfs = [
   {
     id: '1',
-    name: 'Green Valley Stadium',
-    location: 'Downtown, Athletic City',
+    name: 'Foot Work',
+    location: 'Kallimadai, Coimbatore',
     rating: 4.8,
-    imageUrl: 'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=800&q=80',
-    price: 45,
-    sportTypes: ['Football', 'Rugby'],
+    imageUrl: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4npFDLq_ymnmxbwTpTSgxmmk3vokbpjmfGCDicIWv4DV3FaIp_ds57eVCJjnH8kPwNB9bEackwj7TgmolKkoOzMjpgf2httzmFCFpOKsy4KWCSSLSUpX5Qz4AZeeWz_VBCWMfQCABQ=s0',
+    price: 1500,
+    sportTypes: ['Football'],
   },
   {
     id: '2',
-    name: 'Urban Sports Arena',
-    location: 'Westside, Athletic City',
+    name: 'Sports Training & Fitness Unit',
+    location: 'Koundampalayam, Coimbatore',
     rating: 4.6,
-    imageUrl: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&q=80',
-    price: 50,
-    sportTypes: ['Football', 'Basketball'],
+    imageUrl: 'https://lh3.googleusercontent.com/p/AF1QipM0tpJkCZj8tusXgafhjxaqPcxoBGJoJI55X3-1',
+    price: 1400,
+    sportTypes: ['Football', 'Basketball', 'Frisbee', 'Crossfit'],
   },
   {
     id: '3',
-    name: 'Central Cricket Ground',
-    location: 'Midtown, Athletic City',
-    rating: 4.9,
-    imageUrl: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&q=80',
-    price: 55,
-    sportTypes: ['Cricket'],
+    name: 'Tiki Taka',
+    location: 'T.Nagar, Chennai',
+    rating: 4.7,
+    imageUrl: 'https://lh3.googleusercontent.com/p/AF1QipP9ITtkorTsrLbWsHt6BUxS2GeguxK5n-S1jdjZ',
+    price: 1500,
+    sportTypes: ['Cricket', 'Football'],
   },
   {
     id: '4',
-    name: 'Tennis Paradise',
-    location: 'Northside, Athletic City',
-    rating: 4.7,
-    imageUrl: 'https://images.unsplash.com/photo-1622279457486-28f993f78ade?w=800&q=80',
-    price: 35,
-    sportTypes: ['Tennis', 'Badminton'],
-  },
-  {
-    id: '5',
-    name: 'Riverside Basketball Court',
-    location: 'Riverside, Athletic City',
-    rating: 4.5,
-    imageUrl: 'https://images.unsplash.com/photo-1505666287802-931dc83a5dc1?w=800&q=80',
-    price: 40,
-    sportTypes: ['Basketball'],
-  },
-  {
-    id: '6',
-    name: 'Eagle Golf Club',
-    location: 'Hillside, Athletic City',
-    rating: 4.9,
-    imageUrl: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=800&q=80',
-    price: 80,
-    sportTypes: ['Golf'],
+    name: 'Game On Sports Arena',
+    location: 'Egmore, Chennai',
+    rating: 4.8,
+    imageUrl: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqVVijXJ2gXawJVrgpeXRKCSnI3rF-xUPRSd1X17X94VJ-gzO4xLqQBmA13fFNaSJNsFM2kBTAW7tE-Q2qVriYzCuiiB7oNeDHxHhQNSvsUbSv06A-1bee1roou1oBinNrQ3iw1',
+    price: 1500,
+    sportTypes: ['Cricket', 'Football'],
   },
 ];
+
+// TurfCard Component
+const TurfCardComponent = ({ name, location, rating, imageUrl, price, sportTypes, id }) => {
+  return (
+    <Card className="overflow-hidden h-full flex flex-col min-h-[400px] transition-transform duration-1000 hover:scale-105 group">
+      <div className="relative h-64 overflow-hidden">
+        <img 
+          src={imageUrl} 
+          alt={name} 
+          className="w-full h-full object-cover transition-transform duration-1000 delay-1000 group-hover:scale-110"
+        />
+        <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded-full flex items-center">
+          <Star size={16} className="text-yellow-500 fill-yellow-500 mr-1" />
+          <span className="font-medium dark:text-blue-500">{rating}</span>
+        </div>
+      </div>
+      <CardContent className="p-4 flex flex-col flex-grow">
+        <h3 className="text-lg font-semibold mb-1">{name}</h3>
+        <p className="text-gray-500 text-sm mb-2">{location}</p>
+        <div className="flex flex-wrap gap-1 mb-3">
+          {sportTypes.map((sport, index) => (
+            <span key={index} className="bg-turf-50 text-turf-700 px-2 py-1 rounded-full text-xs">
+              {sport}
+            </span>
+          ))}
+        </div>
+        <div className="mt-auto flex justify-between items-center">
+          <p className="text-turf-700 font-bold">₹{price}/hr</p>
+          <Button variant="outline" size="sm" asChild>
+            <Link to={`/book-turf/${id}`}>Book Now</Link>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 const BookTurf = () => {
   const { id } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSport, setSelectedSport] = useState<string>('all');
+  const [selectedSport, setSelectedSport] = useState('all');
   const [displayedTurfs, setDisplayedTurfs] = useState(allTurfs);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -88,7 +105,6 @@ const BookTurf = () => {
       ? `Book ${selectedTurf?.name || 'Turf'} - Sportify Turf` 
       : 'Book a Turf - Sportify Turf';
       
-    // Filter turfs based on search query and selected sport
     let filtered = [...allTurfs];
     
     if (searchQuery) {
@@ -108,11 +124,11 @@ const BookTurf = () => {
     setDisplayedTurfs(filtered);
   }, [id, searchQuery, selectedSport, selectedTurf?.name]);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  const handleSportChange = (value: string) => {
+  const handleSportChange = (value) => {
     setSelectedSport(value);
   };
 
@@ -121,11 +137,10 @@ const BookTurf = () => {
     setSelectedSport('all');
   };
 
-  // If there's an ID, show the booking page for that specific turf
   if (id && selectedTurf) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navbar />
+        <Navbar overrideTextColor="text-blue-500" />
         
         <main className="flex-1 pt-20">
           <div className="container py-8">
@@ -135,7 +150,6 @@ const BookTurf = () => {
             </Link>
             
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-              {/* Turf Details */}
               <div className="lg:col-span-2">
                 <Card className="overflow-hidden">
                   <div className="relative h-64">
@@ -172,7 +186,7 @@ const BookTurf = () => {
                       <div className="flex items-center justify-between mb-4">
                         <div>
                           <p className="text-gray-500">Price per hour</p>
-                          <p className="text-2xl font-bold text-turf-700">${selectedTurf.price}</p>
+                          <p className="text-2xl font-bold text-turf-700">₹{selectedTurf.price}</p>
                         </div>
                         <div className="bg-green-50 text-green-700 px-3 py-1 rounded-full flex items-center">
                           <Check size={16} className="mr-1" />
@@ -189,7 +203,6 @@ const BookTurf = () => {
                 </Card>
               </div>
               
-              {/* Booking Calendar */}
               <div className="lg:col-span-3">
                 <BookingCalendar />
               </div>
@@ -202,10 +215,9 @@ const BookTurf = () => {
     );
   }
 
-  // Otherwise, show the turf listing page
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar overrideTextColor="text-blue-500" />
       
       <main className="flex-1 pt-20 pb-16">
         <div className="bg-gradient-to-r from-turf-700/90 to-sport-700/90 py-8 text-white">
@@ -219,7 +231,6 @@ const BookTurf = () => {
         </div>
         
         <div className="container py-8">
-          {/* Search and Filter */}
           <div className="mb-6 flex flex-col md:flex-row items-center gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -258,7 +269,6 @@ const BookTurf = () => {
             </div>
           </div>
           
-          {/* Active Filters */}
           {(searchQuery || selectedSport !== 'all') && (
             <div className="flex items-center gap-2 mb-6">
               <span className="text-sm text-gray-500">Active filters:</span>
@@ -295,7 +305,6 @@ const BookTurf = () => {
             </div>
           )}
           
-          {/* Turf Listing */}
           <Tabs defaultValue="grid" className="mb-6">
             <div className="flex justify-between items-center">
               <span className="text-gray-500">
@@ -309,8 +318,8 @@ const BookTurf = () => {
             
             <TabsContent value="grid" className="mt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {displayedTurfs.map((turf, index) => (
-                  <TurfCard key={turf.id} {...turf} index={index} />
+                {displayedTurfs.map((turf) => (
+                  <TurfCardComponent key={turf.id} {...turf} />
                 ))}
               </div>
             </TabsContent>
@@ -318,55 +327,51 @@ const BookTurf = () => {
             <TabsContent value="list" className="mt-6">
               <div className="space-y-4">
                 {displayedTurfs.map((turf) => (
-                  <Card key={turf.id} className="overflow-hidden">
-                    <div className="flex flex-col sm:flex-row">
-                      <div className="sm:w-1/3 h-48 sm:h-auto">
-                        <img 
-                          src={turf.imageUrl} 
-                          alt={turf.name} 
-                          className="w-full h-full object-cover"
-                        />
+                  <Card key={turf.id} className="overflow-hidden h-full flex flex-col sm:flex-row min-h-[400px] transition-transform duration-300 hover:scale-100 group">
+                    <div className="relative h-64 sm:h-auto sm:w-1/3 overflow-hidden">
+                      <img 
+                        src={turf.imageUrl} 
+                        alt={turf.name} 
+                        className="w-full h-full object-cover transition-transform duration-300 delay-300 group-hover:scale-100"
+                      />
+                      <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded-full flex items-center">
+                        <Star size={14} className="text-yellow-500 fill-yellow-500 mr-1" />
+                        <span className="text-sm font-medium dark:text-blue-500">{turf.rating}</span>
                       </div>
-                      <div className="p-4 sm:p-6 flex-1 flex flex-col">
-                        <div>
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <h3 className="font-semibold text-xl">{turf.name}</h3>
-                              <div className="flex items-center text-gray-500 mt-1">
-                                <MapPin size={14} className="mr-1" />
-                                <span className="text-sm">{turf.location}</span>
-                              </div>
-                            </div>
-                            <div className="flex items-center bg-white shadow-sm px-2 py-1 rounded-full">
-                              <Star size={14} className="text-yellow-500 fill-yellow-500 mr-1" />
-                              <span className="text-sm font-medium">{turf.rating}</span>
-                            </div>
-                          </div>
-
-                          <div className="flex flex-wrap gap-2 mt-3">
-                            {turf.sportTypes.map((sport, index) => (
-                              <span 
-                                key={index} 
-                                className="text-xs bg-turf-50 text-turf-700 px-2 py-1 rounded-full"
-                              >
-                                {sport}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center justify-between mt-auto pt-4">
+                    </div>
+                    <div className="p-4 sm:p-6 flex-1 flex flex-col">
+                      <div className="flex-grow">
+                        <div className="flex justify-between items-start mb-2">
                           <div>
-                            <p className="text-turf-700 font-bold text-xl">${turf.price}</p>
-                            <p className="text-gray-500 text-sm">per hour</p>
+                            <h3 className="font-semibold text-xl truncate">{turf.name}</h3>
+                            <div className="flex items-center text-gray-500 mt-1">
+                              <MapPin size={14} className="mr-1" />
+                              <span className="text-sm">{turf.location}</span>
+                            </div>
                           </div>
-                          <Button className="flex items-center gap-1" asChild>
-                            <Link to={`/book-turf/${turf.id}`}>
-                              Book Now
-                              <ArrowRight size={16} className="ml-1" />
-                            </Link>
-                          </Button>
                         </div>
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {turf.sportTypes.map((sport, index) => (
+                            <span 
+                              key={index} 
+                              className="text-xs bg-turf-50 text-turf-700 px-2 py-1 rounded-full"
+                            >
+                              {sport}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between mt-4">
+                        <div>
+                          <p className="text-turf-700 font-bold text-xl">₹{turf.price}</p>
+                          <p className="text-gray-500 text-sm">per hour</p>
+                        </div>
+                        <Button className="flex items-center gap-1" asChild>  
+                          <Link to={`/book-turf/${turf.id}`}>
+                            Book Now
+                            <ArrowRight size={16} className="ml-1" />
+                          </Link>
+                        </Button>
                       </div>
                     </div>
                   </Card>
@@ -375,7 +380,6 @@ const BookTurf = () => {
             </TabsContent>
           </Tabs>
           
-          {/* No Results Message */}
           {displayedTurfs.length === 0 && (
             <div className="text-center py-12 bg-gray-50 rounded-lg">
               <Search size={48} className="mx-auto text-gray-400 mb-4" />
