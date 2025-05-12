@@ -1,38 +1,53 @@
-
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Moon, Sun } from 'lucide-react';
 import AuthForm from '@/components/AuthForm';
 
 const Login = () => {
+  const [theme, setTheme] = useState<string>(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
+
+  const handleThemeChange = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
+
   useEffect(() => {
     document.title = 'Login - Sportify Turf';
-  }, []);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
 
   return (
-    <div className="min-h-screen flex">
+    <div className="h-screen w-screen flex bg-gray-50 dark:bg-gray-900">
       {/* Left side - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col p-8 justify-center">
-        <div className="mb-6">
-          <Link to="/" className="text-gray-500 flex items-center hover:text-gray-700">
+      <div className="w-full lg:w-1/2 flex flex-col p-6 justify-center relative bg-white dark:bg-gray-800">
+        <div className="mb-4">
+          <Link to="/" className="text-gray-500 dark:text-gray-300 flex items-center hover:text-gray-700 dark:hover:text-gray-100">
             <ArrowLeft size={16} className="mr-2" />
             Back to home
           </Link>
         </div>
-        
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Welcome back!</h1>
-          <p className="text-gray-600">Sign in to your account to manage your bookings.</p>
+        <div className="mb-4">
+          <h1 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">Welcome back!</h1>
+          <p className="text-gray-600 dark:text-gray-300">Sign in to your account to manage your bookings.</p>
         </div>
 
         <AuthForm defaultTab="login" />
       </div>
-
-      {/* Right side - Image */}
       <div className="hidden lg:block lg:w-1/2 bg-cover bg-center" style={{ 
         backgroundImage: `url('https://images.unsplash.com/photo-1624264834391-92f0ab828711?w=1200&q=80')`,
       }}>
-        <div className="h-full w-full bg-gradient-to-r from-turf-700/90 to-sport-700/80 flex items-center justify-center">
+        <div className="h-full w-full bg-gradient-to-r from-turf-700/90 to-sport-700/80 flex items-center justify-center relative">
+          <button
+            onClick={handleThemeChange}
+            className="absolute top-8 right-8 p-2 rounded-full text-white hover:bg-white/20 transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+          </button>
           <div className="max-w-md text-white p-8">
             <h2 className="text-3xl font-bold mb-4">Experience Seamless Sports Venue Booking</h2>
             <p className="mb-6">

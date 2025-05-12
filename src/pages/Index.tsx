@@ -470,7 +470,7 @@ const Index = () => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   size="default"
-                  className="sm:text-lg bg-white dark:bg-dark-theme-lightest text-turf-700 dark:text-turf-300 hover:bg-turf-100 dark:hover:bg-dark-theme font-semibold tracking-wide shadow-lg hover:shadow-glow transition-all duration-300 text-sm sm:text-base"
+                  className="sm:text-lg dark:bg-dark-theme-lightest text-turf-700 dark:text-turf-300 hover:bg-turf-100 dark:hover:bg-dark-theme font-semibold tracking-wide hover:shadow-glow transition-all duration-300 text-sm sm:text-base"
                   asChild
                 >
                   <Link to="/contact">Contact Us</Link>

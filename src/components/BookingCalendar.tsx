@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Clock } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
@@ -14,6 +13,21 @@ interface TimeSlot {
 const BookingCalendar = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+
+  // Theme state
+  const [theme, setTheme] = useState<string>(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
+
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
 
   // Sample time slots data
   const timeSlots: TimeSlot[] = [
@@ -48,17 +62,17 @@ const BookingCalendar = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
-      <h2 className="text-xl font-semibold mb-4">Select Date & Time</h2>
+    <div className="bg-white dark:bg-dark-theme-lightest rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-600">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Select Date & Time</h2>
       
       <div className="flex flex-col md:flex-row gap-6">
         <div className="w-full md:w-1/2">
-          <div className="p-2 rounded-lg border mb-4">
+          <div className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 mb-4">
             <Calendar
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="rounded-md"
+              className="rounded-md bg-white dark:bg-dark-theme-lightest text-gray-900 dark:text-gray-200"
               disabled={(date) => {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
@@ -67,20 +81,20 @@ const BookingCalendar = () => {
             />
           </div>
           
-          <div className="bg-turf-50 rounded-lg p-3 text-center animate-fade-in">
-            <p className="text-turf-800 font-medium">
+          <div className="bg-turf-50 dark:bg-turf-700 rounded-lg p-3 text-center animate-fade-in">
+            <p className="text-turf-800 dark:text-turf-300 font-medium">
               Selected date: {getFormattedDate(date)}
             </p>
           </div>
         </div>
 
         <div className="w-full md:w-1/2">
-          <h3 className="font-medium text-gray-700 flex items-center mb-4">
-            <Clock className="mr-2 h-5 w-5 text-turf-600" />
+          <h3 className="font-medium text-gray-700 dark:text-gray-300 flex items-center mb-4">
+            <Clock className="mr-2 h-5 w-5 text-turf-600 dark:text-turf-300" />
             Available Time Slots
           </h3>
 
-          <div className="grid grid-cols-2 gap-2 max-h-80 overflow-y-auto p-1">
+          <div className="grid grid-cols-2 gap-2 max-h-80 overflow-y-auto p-1 border border-gray-300 dark:border-gray-600 rounded-lg">
             {timeSlots.map((slot) => (
               <Button
                 key={slot.id}
@@ -88,15 +102,15 @@ const BookingCalendar = () => {
                 onClick={() => handleTimeSlotSelect(slot.id)}
                 disabled={!slot.isAvailable}
                 className={cn(
-                  "justify-start text-left h-auto py-3 transition-all",
-                  selectedSlot === slot.id && "bg-turf-600 text-white",
-                  !slot.isAvailable && "opacity-50 line-through"
+                  "justify-start text-left h-auto py-2 transition-all bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200",
+                  selectedSlot === slot.id && "bg-turf-600 dark:bg-turf-700 text-white dark:text-white",
+                  !slot.isAvailable && "opacity-50 line-through text-gray-500 dark:text-gray-400"
                 )}
               >
                 <div className="flex flex-col items-start">
-                  <span className="text-sm">{slot.time}</span>
+                  <span className="text-xs">{slot.time}</span>
                   {!slot.isAvailable && (
-                    <span className="text-xs mt-1 text-muted-foreground">Booked</span>
+                    <span className="text-[10px] mt-1 text-black dark:text-white">Booked</span>
                   )}
                 </div>
               </Button>
@@ -105,7 +119,7 @@ const BookingCalendar = () => {
 
           {selectedSlot && (
             <div className="mt-6 animate-fade-in">
-              <Button className="w-full bg-turf-600 hover:bg-turf-700">
+              <Button className="w-full bg-turf-600 dark:bg-turf-700 hover:bg-turf-700 dark:hover:bg-turf-600 text-white dark:text-white">
                 Confirm Booking
               </Button>
             </div>
