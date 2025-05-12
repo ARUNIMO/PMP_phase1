@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Send, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -17,6 +16,21 @@ const Contact = () => {
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Theme state synced with Navbar
+  const [theme, setTheme] = useState<string>(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
+
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -51,7 +65,7 @@ const Contact = () => {
   
   const contactInfo = [
     {
-      icon: <MapPin size={24} />,
+      icon: <MapPin size={24} className="text-turf-600 dark:text-turf-300" />,
       title: "Visit Us",
       details: [
         "PickMyPitch HQ",
@@ -60,7 +74,7 @@ const Contact = () => {
       ]
     },
     {
-      icon: <Phone size={24} />,
+      icon: <Phone size={24} className="text-turf-600 dark:text-turf-300" />,
       title: "Call Us",
       details: [
         "+91 98765 43210",
@@ -68,7 +82,7 @@ const Contact = () => {
       ]
     },
     {
-      icon: <Mail size={24} />,
+      icon: <Mail size={24} className="text-turf-600 dark:text-turf-300" />,
       title: "Email Us",
       details: [
         "hello@pickmypitch.com",
@@ -97,12 +111,12 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-dark-theme-lighter">
+      <Navbar onThemeChange={handleThemeChange} />
       
       {/* Hero Section */}
       <section className="pt-28 pb-16 bg-gradient-to-r from-turf-800 to-sport-900 text-white">
-        <div className="container">
+        <div className="container px-2 sm:px-4">
           <motion.div 
             className="max-w-3xl mx-auto text-center"
             initial={{ opacity: 0, y: 20 }}
@@ -110,7 +124,7 @@ const Contact = () => {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Contact Us</h1>
-            <p className="text-lg text-gray-200">
+            <p className="text-lg text-gray-200 dark:text-gray-300">
               Have questions or feedback? We'd love to hear from you!
             </p>
           </motion.div>
@@ -118,30 +132,30 @@ const Contact = () => {
       </section>
       
       {/* Contact Form & Info */}
-      <section className="py-16 bg-white">
-        <div className="container">
+      <section className="py-16 bg-white dark:bg-dark-theme-lighter">
+        <div className="container px-2 sm:px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="bg-white rounded-xl shadow-lg p-8 border border-gray-100"
+              className="bg-white dark:bg-dark-theme-lightest rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-600"
             >
-              <h2 className="text-2xl font-bold mb-6 text-gray-800">Send us a message</h2>
+              <h2 className="text-2xl font-bold mb-3 text-gray-800 dark:text-white">Send us a message</h2>
               
               {isSubmitted ? (
                 <motion.div 
-                  className="text-center py-12"
+                  className="text-center py-4"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="mb-4 inline-block">
-                    <CheckCircle size={50} className="text-green-500 mx-auto" />
+                  <div className="mb-1 inline-block">
+                    <CheckCircle size={32} className="text-green-500 dark:text-green-400 mx-auto" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Thank You!</h3>
-                  <p className="text-gray-600 mb-6">
+                  <h3 className="text-base font-semibold mb-1 text-gray-800 dark:text-white">Thank You!</h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-2 text-sm">
                     Your message has been sent successfully. We'll get back to you soon!
                   </p>
                   <Button 
@@ -149,14 +163,15 @@ const Contact = () => {
                       setIsSubmitted(false);
                       setFormState({ name: '', email: '', message: '' });
                     }}
+                    className="bg-turf-600 dark:bg-turf-700 text-white hover:bg-turf-700 dark:hover:bg-turf-600 w-full"
                   >
                     Send Another Message
                   </Button>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit}>
-                  <div className="mb-4">
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <div className="mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Your Name
                     </label>
                     <Input
@@ -165,12 +180,12 @@ const Contact = () => {
                       value={formState.name}
                       onChange={handleInputChange}
                       placeholder="John Doe"
-                      className="w-full"
+                      className="w-full bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200"
                     />
                   </div>
                   
-                  <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  <div className="mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Email Address
                     </label>
                     <Input
@@ -180,12 +195,12 @@ const Contact = () => {
                       value={formState.email}
                       onChange={handleInputChange}
                       placeholder="john@example.com"
-                      className="w-full"
+                      className="w-full bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200"
                     />
                   </div>
                   
-                  <div className="mb-6">
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                  <div className="mb-3">
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Your Message
                     </label>
                     <Textarea
@@ -194,18 +209,23 @@ const Contact = () => {
                       value={formState.message}
                       onChange={handleInputChange}
                       placeholder="How can we help you?"
-                      rows={5}
-                      className="w-full"
+                      rows={4}
+                      className="w-full bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200"
                     />
                   </div>
                   
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-gradient-to-r from-turf-600 to-sport-600 hover:from-turf-700 hover:to-sport-700 text-white"
+                  <motion.div
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                   >
-                    <Send size={16} className="mr-2" />
-                    Send Message
-                  </Button>
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-gradient-to-r from-turf-600 to-sport-600 dark:from-turf-700 dark:to-sport-700 hover:from-turf-700 hover:to-sport-700 dark:hover:from-turf-600 dark:hover:to-sport-600 text-white"
+                    >
+                      <Send size={16} className="mr-2" />
+                      Send Message
+                    </Button>
+                  </motion.div>
                 </form>
               )}
             </motion.div>
@@ -213,7 +233,7 @@ const Contact = () => {
             {/* Contact Info */}
             <div>
               <motion.h2 
-                className="text-2xl font-bold mb-6 text-gray-800"
+                className="text-2xl font-bold mb-6 text-gray-800 dark:text-white"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
@@ -231,47 +251,50 @@ const Contact = () => {
                   <motion.div 
                     key={index}
                     variants={itemAnimation}
-                    className="flex items-start p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    className="flex items-start p-4 rounded-lg bg-gray-50 dark:bg-dark-theme-lightest"
                   >
-                    <div className="bg-turf-100 p-3 rounded-full mr-4">
-                      <span className="text-turf-600">{info.icon}</span>
+                    <div className="bg-turf-100 dark:bg-turf-700 p-3 rounded-full mr-4">
+                      <span className="text-turf-600 dark:text-turf-300">{info.icon}</span>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 mb-2">{info.title}</h3>
-                      {info.details.map((detail, i) => (
-                        <p key={i} className="text-gray-600">{detail}</p>
+                      <h3 className="font-semibold text-gray-800 dark:text-white mb-2">{info.title}</h3>
+                      {  info.details.map((detail, i) => (
+                        <p key={i} className="text-gray-600 dark:text-gray-300">{detail}</p>
                       ))}
                     </div>
                   </motion.div>
                 ))}
               </motion.div>
-              
-              {/* Map */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="mt-8 rounded-xl overflow-hidden shadow-lg border border-gray-200"
-              >
-                <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d497511.1146383072!2d79.92880809887291!3d13.04762809538816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1713722341871!5m2!1sen!2sin" 
-                  width="100%" 
-                  height="300" 
-                  style={{ border: 0 }} 
-                  allowFullScreen 
-                  loading="lazy" 
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="PickMyPitch Location"
-                ></iframe>
-              </motion.div>
             </div>
           </div>
+          
+          {/* Map */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mt-6 -mx-2 sm:-mx-4 lg:mx-0 lg:w-full rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-600"
+          >
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d497511.1146383072!2d79.92880809887291!3d13.04762809538816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1713722341871!5m2!1sen!2sin" 
+              width="100%" 
+              height="400" 
+              style={{ border: 0 }} 
+              allowFullScreen 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="PickMyPitch Location"
+              className="w-full"
+            ></iframe>
+          </motion.div>
         </div>
       </section>
       
       {/* FAQ Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container">
+      <section className="py-16 bg-gray-50 dark:bg-dark-theme-lighter">
+        <div className="container px-2 sm:px-4">
           <motion.div
             className="text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
@@ -279,8 +302,8 @@ const Contact = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-bold mb-4 text-gray-800">Frequently Asked Questions</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4 text-gray-800 dark:text-white">Frequently Asked Questions</h2>
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Find quick answers to common questions about our services.
             </p>
           </motion.div>
@@ -314,10 +337,10 @@ const Contact = () => {
                 <motion.div 
                   key={index}
                   variants={itemAnimation}
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all border border-gray-100"
+                  className="bg-white dark:bg-dark-theme-lightest p-6 rounded-lg shadow-md hover:shadow-lg transition-all border border-gray-100 dark:border-gray-600"
                 >
-                  <h3 className="text-lg font-semibold mb-2 text-gray-800">{faq.question}</h3>
-                  <p className="text-gray-600">{faq.answer}</p>
+                  <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">{faq.question}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{faq.answer}</p>
                 </motion.div>
               ))}
             </motion.div>

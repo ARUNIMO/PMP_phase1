@@ -25,7 +25,13 @@ const Index = () => {
 
   const handleThemeChange = (newTheme: string) => {
     setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
   };
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -199,7 +205,7 @@ const Index = () => {
     return Math.sin((val / singleSetWidth) * Math.PI * 2) * 1;
   });
 
-useEffect(() => {
+  useEffect(() => {
     const { singleSetWidth } = getDimensions();
     x.set(0); // Initialize once
   }, []);
@@ -258,7 +264,7 @@ useEffect(() => {
             <motion.div variants={itemVariants}>
               <Button
                 variant="outline"
-                className="hidden md:flex items-center gap-1 bg-white dark:bg-dark-theme hover:bg-gray-100 dark:hover:bg-dark-theme-lighter transition-all dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base"
+                className="hidden md:flex items-center gap-1 bg-white dark:bg-dark-theme-lightest hover:bg-gray-100 dark:hover:bg-dark-theme transition-all dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base"
                 asChild
               >
                 <Link to="/book-turf">
@@ -282,7 +288,7 @@ useEffect(() => {
             variants={containerVariants}
           >
             <motion.div variants={itemVariants}>
-              <Button variant="outline" asChild className="bg-white dark:bg-dark-theme hover:bg-gray-100 dark:hover:bg-dark-theme-lighter dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base">
+              <Button variant="outline" asChild className="bg-white dark:bg-dark-theme-lightest hover:bg-gray-100 dark:hover:bg-dark-theme transition-all dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base">
                 <Link to="/book-turf">View All Turfs</Link>
               </Button>
             </motion.div>
@@ -364,7 +370,7 @@ useEffect(() => {
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={testimonial.id}
-                className="bg-white dark:bg-dark-theme-lighter p-4 sm:p-6 rounded-xl border border-gray-100 dark:border-gray-600 relative"
+                className="bg-white dark:bg-dark-theme-lightest p-4 sm:p-6 rounded-xl border border-gray-100 dark:border-gray-600 relative"
                 variants={itemVariants}
                 whileHover={{ y: -10, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
               >
@@ -406,36 +412,37 @@ useEffect(() => {
           </motion.div>
 
           <div
-          ref={containerRef}
-          className="overflow-hidden"
-          onMouseEnter={() => handleHover(true)}
-          onMouseLeave={() => handleHover(false)}
-        >
-          <motion.div
-            style={{ x, y }}
-            className="flex gap-4 py-6"
+            ref={containerRef}
+            className="overflow-hidden"
+            onMouseEnter={() => handleHover(true)}
+            onMouseLeave={() => handleHover(false)}
           >
-            {[...turfLogos, ...turfLogos, ...turfLogos].map((turf, index) => (
-              <motion.div
-                ref={index === 0 ? logoRef : null}
-                key={`${turf.name}-${index}`}
-                className="flex-shrink-0 w-[18vw] h-[18vw] sm:w-[15vw] sm:h-[15vw] max-w-20 max-h-20 sm:max-w-24 sm:max-h-24 bg-white dark:bg-dark-theme-lighter rounded-full flex items-center justify-center relative"
-                whileHover={{ 
-                  scale: 1.1, 
-                  transition: { type: 'spring', stiffness: 300, damping: 10 } 
-                }}
-              >
-                <img
-                  src={turf.logoUrl}
-                  alt={`${turf.name} logo`}
-                  className="max-w-[80%] max-h-[80%] object-contain pointer-events-none"
-                />
-              </motion.div>
-            ))}
-          </motion.div>
+            <motion.div
+              style={{ x, y }}
+              className="flex gap-4 py-6"
+            >
+              {[...turfLogos, ...turfLogos, ...turfLogos].map((turf, index) => (
+                <motion.div
+                  ref={index === 0 ? logoRef : null}
+                  key={`${turf.name}-${index}`}
+                  className="flex-shrink-0 w-[18vw] h-[18vw] sm:w-[15vw] sm:h-[15vw] max-w-20 max-h-20 sm:max-w-24 sm:max-h-24 bg-white dark:bg-dark-theme-lightest rounded-full flex items-center justify-center relative"
+                  whileHover={{ 
+                    scale: 1.1, 
+                    transition: { type: 'spring', stiffness: 300, damping: 10 } 
+                  }}
+                >
+                  <img
+                    src={turf.logoUrl}
+                    alt={`${turf.name} logo`}
+                    className="max-w-[80%] max-h-[80%] object-contain pointer-events-none"
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
       {/* CTA */}
       <section className="py-8 sm:py-16 bg-gradient-to-r from-turf-700 to-sport-700 text-white font-sans">
         <div className="container px-2 sm:px-4">
@@ -454,7 +461,7 @@ useEffect(() => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   size="default"
-                  className="sm:text-lg bg-white text-turf-700 hover:bg-turf-100 font-semibold tracking-wide shadow-lg hover:shadow-glow transition-all duration-300 text-sm sm:text-base"
+                  className="sm:text-lg bg-white dark:bg-dark-theme-lightest text-turf-700 dark:text-turf-300 hover:bg-turf-100 dark:hover:bg-dark-theme font-semibold tracking-wide shadow-lg hover:shadow-glow transition-all duration-300 text-sm sm:text-base"
                   asChild
                 >
                   <Link to="/book-turf">Book Now</Link>
@@ -463,7 +470,7 @@ useEffect(() => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   size="default"
-                  className="sm:text-lg bg-white text-turf-700 hover:bg-turf-100 font-semibold tracking-wide shadow-lg hover:shadow-glow transition-all duration-300 text-sm sm:text-base"
+                  className="sm:text-lg bg-white dark:bg-dark-theme-lightest text-turf-700 dark:text-turf-300 hover:bg-turf-100 dark:hover:bg-dark-theme font-semibold tracking-wide shadow-lg hover:shadow-glow transition-all duration-300 text-sm sm:text-base"
                   asChild
                 >
                   <Link to="/contact">Contact Us</Link>
