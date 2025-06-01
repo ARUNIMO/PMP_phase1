@@ -48,12 +48,14 @@ const allTurfs = [
     id: '4',
     name: 'Game On Sports Arena',
     location: 'Egmore, Chennai',
-    rating: undefined, // Changed to undefined to test "blank" state
+    rating: undefined,
     imageUrl: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqVVijXJ2gXawJVrgpeXRKCSnI3rF-xUPRSd1X17X94VJ-gzO4xLqQBmA13fFNaSJNsFM2kBTAW7tE-Q2qVriYzCuiiB7oNeDHxHhQNSvsUbSv06A-1bee1roou1oBinNrQ3iw1',
     price: 1500,
     sportTypes: ['Cricket', 'Football'],
   },
 ];
+
+const cities = ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem', 'Vellore'];
 
 // TurfCard Component
 const TurfCardComponent = ({ name, location, rating, imageUrl, price, sportTypes, id }) => {
@@ -99,6 +101,8 @@ const BookTurf = () => {
   const { id } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSport, setSelectedSport] = useState('all');
+  const [sortBy, setSortBy] = useState('none');
+  const [selectedCity, setSelectedCity] = useState('all');
   const [displayedTurfs, setDisplayedTurfs] = useState(allTurfs);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -111,6 +115,7 @@ const BookTurf = () => {
       
     let filtered = [...allTurfs];
     
+    // Apply search filter
     if (searchQuery) {
       filtered = filtered.filter(
         (turf) => 
@@ -119,14 +124,29 @@ const BookTurf = () => {
       );
     }
     
+    // Apply sport filter
     if (selectedSport && selectedSport !== 'all') {
       filtered = filtered.filter(
         (turf) => turf.sportTypes.includes(selectedSport)
       );
     }
     
+    // Apply city filter when a city is selected
+    if (selectedCity !== 'all') {
+      filtered = filtered.filter(
+        (turf) => turf.location.includes(selectedCity)
+      );
+    }
+    
+    // Apply sorting
+    if (sortBy === 'price-asc') {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price-desc') {
+      filtered.sort((a, b) => b.price - a.price);
+    }
+    
     setDisplayedTurfs(filtered);
-  }, [id, searchQuery, selectedSport, selectedTurf?.name]);
+  }, [id, searchQuery, selectedSport, sortBy, selectedCity, selectedTurf?.name]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -136,9 +156,19 @@ const BookTurf = () => {
     setSelectedSport(value);
   };
 
+  const handleSortChange = (value) => {
+    setSortBy(value);
+  };
+
+  const handleCityChange = (value) => {
+    setSelectedCity(value);
+  };
+
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedSport('all');
+    setSortBy('none');
+    setSelectedCity('all');
   };
 
   if (id && selectedTurf) {
@@ -270,10 +300,33 @@ const BookTurf = () => {
                   <SelectItem value="Golf">Golf</SelectItem>
                 </SelectContent>
               </Select>
+              
+              <Select value={selectedCity} onValueChange={handleCityChange}>
+                <SelectTrigger className="w-[180px] bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                  <SelectValue placeholder="Select City" />
+                </SelectTrigger>
+                <SelectContent className="bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                  <SelectItem value="all">All Cities</SelectItem>
+                  {cities.map((city) => (
+                    <SelectItem key={city} value={city}>{city}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <Select value={sortBy} onValueChange={handleSortChange}>
+                <SelectTrigger className="w-[180px] bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                  <SelectValue placeholder="Sort By" />
+                </SelectTrigger>
+                <SelectContent className="bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                  <SelectItem value="none">None</SelectItem>
+                  <SelectItem value="price-asc">Price (Low to High)</SelectItem>
+                  <SelectItem value="price-desc">Price (High to Low)</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           
-          {(searchQuery || selectedSport !== 'all') && (
+          {(searchQuery || selectedSport !== 'all' || sortBy !== 'none' || selectedCity !== 'all') && (
             <div className="flex items-center gap-2 mb-6">
               <span className="text-sm text-gray-500 dark:text-gray-400">Active filters:</span>
               {searchQuery && (
@@ -295,6 +348,32 @@ const BookTurf = () => {
                     onClick={() => setSelectedSport('all')}
                     className="ml-1"
                     aria-label="Clear sport filter"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              )}
+              {sortBy !== 'none' && (
+                <div className="bg-gray-100 dark:bg-dark-theme text-gray-800 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center">
+                  <span>
+                    Sort: {sortBy === 'price-asc' ? 'Price (Low to High)' : 'Price (High to Low)'}
+                  </span>
+                  <button 
+                    onClick={() => setSortBy('none')}
+                    className="ml-1"
+                    aria-label="Clear sort"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              )}
+              {selectedCity !== 'all' && (
+                <div className="bg-gray-100 dark:bg-dark-theme text-gray-800 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center">
+                  <span>City: {selectedCity}</span>
+                  <button 
+                    onClick={() => setSelectedCity('all')}
+                    className="ml-1"
+                    aria-label="Clear city filter"
                   >
                     <X size={14} />
                   </button>

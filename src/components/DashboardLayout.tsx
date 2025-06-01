@@ -19,7 +19,7 @@ interface DashboardLayoutProps {
 const DashboardLayout = ({ children, userRole = 'user' }: DashboardLayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Changed to false for mobile
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar starts minimized
   const [theme, setTheme] = useState<string>(() => {
     return localStorage.getItem('theme') || 'light';
   });
@@ -73,7 +73,7 @@ const DashboardLayout = ({ children, userRole = 'user' }: DashboardLayoutProps) 
       {/* Sidebar */}
       <aside 
         className={cn(
-          "bg-white dark:bg-dark-theme-lightest border-r border-gray-200 dark:border-gray-600 transition-all duration-300",
+          "fixed top-0 left-0 h-screen bg-white dark:bg-dark-theme-lightest border-r border-gray-200 dark:border-gray-600 transition-all duration-300 z-20",
           isSidebarOpen ? "w-64" : "w-20"
         )}
       >
@@ -81,8 +81,8 @@ const DashboardLayout = ({ children, userRole = 'user' }: DashboardLayoutProps) 
           {/* Sidebar Header */}
           <div className="h-16 flex items-center px-4 border-b border-gray-200 dark:border-gray-600">
             <div className={cn(
-              "flex items-center gap-2 transition-all duration-300",
-              isSidebarOpen ? "" : "justify-center w-full"
+              "flex items-center transition-all duration-300",
+              isSidebarOpen ? "gap-2" : "justify-center w-full"
             )}>
               <div className="w-8 h-8 bg-gradient-to-br from-turf-500 to-sport-600 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-white font-bold text-sm">ST</span>
@@ -95,30 +95,18 @@ const DashboardLayout = ({ children, userRole = 'user' }: DashboardLayoutProps) 
               variant="ghost" 
               size="icon" 
               className={cn(
-                "ml-auto text-gray-600 dark:text-gray-300",
-                !isSidebarOpen && "hidden"
+                "text-gray-600 dark:text-gray-300",
+                isSidebarOpen ? "ml-auto" : "ml-2"
               )}
-              onClick={() => setIsSidebarOpen(false)}
-              aria-label="Collapse sidebar"
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
             >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className={cn(
-                "ml-auto text-gray-600 dark:text-gray-300",
-                isSidebarOpen && "hidden"
-              )}
-              onClick={() => setIsSidebarOpen(true)}
-              aria-label="Expand sidebar"
-            >
-              <Menu className="h-4 w-4" />
+              {isSidebarOpen ? <ChevronRight className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </Button>
           </div>
 
           {/* Sidebar Navigation */}
-          <nav className="flex-1 p-4 space-y-2">
+          <nav className="flex-1 p-4 space-y-2 overflow-auto">
             {navItems.map((item) => (
               <Link
                 key={item.path}
@@ -138,22 +126,25 @@ const DashboardLayout = ({ children, userRole = 'user' }: DashboardLayoutProps) 
           </nav>
 
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-600">
+          <div className="p-4 border-t border-gray-200 dark:border-gray-600 mt-auto">
             <Button 
               variant="outline" 
               size={isSidebarOpen ? "default" : "icon"} 
               className="w-full border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-theme"
               onClick={handleLogout}
             >
-              <LogOut size={18} />
-              {isSidebarOpen && <span className="ml-2">Logout</span>}
+              <LogOut size={18} className={isSidebarOpen ? "mr-2" : ""} />
+              {isSidebarOpen && <span>Logout</span>}
             </Button>
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className={cn(
+        "flex-1 flex flex-col transition-all duration-300",
+        isSidebarOpen ? "ml-64" : "ml-20"
+      )}>
         {/* Header */}
         <header className="h-16 border-b border-gray-200 dark:border-gray-600 bg-white dark:bg-dark-theme-lightest flex items-center px-6 sticky top-0 z-10">
           <Button 
@@ -197,15 +188,11 @@ const DashboardLayout = ({ children, userRole = 'user' }: DashboardLayoutProps) 
                   <div className="w-8 h-8 bg-turf-600 dark:bg-turf-700 rounded-full flex items-center justify-center">
                     <User className="h-4 w-4 text-white dark:text-white" />
                   </div>
-                  {isSidebarOpen && (
-                    <>
-                      <div className="text-left hidden md:block">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
-                      </div>
-                      <ChevronDown className="h-4 w-4 opacity-50 text-gray-600 dark:text-gray-300" />
-                    </>
-                  )}
+                  <div className="text-left hidden md:block">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
+                  </div>
+                  <ChevronDown className="h-4 w-4 opacity-50 text-gray-600 dark:text-gray-300" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-dark-theme-lightest border-gray-200 dark:border-gray-600">
