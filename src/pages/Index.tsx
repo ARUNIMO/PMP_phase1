@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useAnimation, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useScroll, useAnimation, useTransform, useMotionValue } from 'framer-motion';
 import { ArrowRight, Calendar, MessageCircle, Search, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,6 @@ const Index = () => {
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0.2, 1], [1, 0.2]);
 
-  // Theme state synced with Navbar
   const [theme, setTheme] = useState<string>(() => {
     return localStorage.getItem('theme') || 'light';
   });
@@ -140,7 +139,6 @@ const Index = () => {
     },
   ];
 
-  // Turf logos for the carousel
   const turfLogos = [
     {
       name: 'Brand 1',
@@ -193,51 +191,11 @@ const Index = () => {
     if (!logoRef.current || !containerRef.current) return { logoWidth: 80, gap: 16, singleSetWidth: 0 };
     
     const logoWidth = logoRef.current.offsetWidth;
-    const containerStyle = window.getComputedStyle(containerRef.current);
+    const containerStyle = window.getComputedStyle(containerRef.current.children[0] as HTMLElement);
     const gap = parseFloat(containerStyle.gap) || 16;
     const n = turfLogos.length;
     const singleSetWidth = (n * logoWidth) + ((n - 1) * gap);
     return { logoWidth, gap, singleSetWidth };
-  };
-
-  const y = useTransform(x, (val) => {
-    const { singleSetWidth } = getDimensions();
-    return Math.sin((val / singleSetWidth) * Math.PI * 2) * 1;
-  });
-
-  useEffect(() => {
-    const { singleSetWidth } = getDimensions();
-    x.set(0); // Initialize once
-  }, []);
-
-  useEffect(() => {
-    let animationFrame: number;
-    const animate = () => {
-      if (!isPaused) {
-        const { singleSetWidth } = getDimensions();
-        const currentX = x.get();
-        const newX = currentX - 0.75;
-        if (newX <= -singleSetWidth) {
-          x.set(newX + singleSetWidth);
-        } else {
-          x.set(newX);
-        }
-      }
-      animationFrame = requestAnimationFrame(animate);
-    };
-    animationFrame = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(animationFrame);
-      if (pauseTimeout.current) clearTimeout(pauseTimeout.current);
-    };
-  }, [isPaused]);
-
-  const handleHover = (shouldPause: boolean) => {
-    if (pauseTimeout.current) clearTimeout(pauseTimeout.current);
-    pauseTimeout.current = setTimeout(() => {
-      setIsPaused(shouldPause);
-    }, 50);
   };
 
   return (
@@ -396,52 +354,75 @@ const Index = () => {
       </section>
 
       {/* Our Partners - Logo Carousel */}
-      <section className="py-8 sm:py-16 bg-gray-50 dark:bg-dark-theme-lighter">
-        <div className="container px-2 sm:px-4">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Our Partners</h2>
-            <p className="text-gray-600 dark:text-gray-300 mt-2 max-w-xl mx-auto text-sm sm:text-base">
-              We collaborate with the best turf venues across Tamil Nadu to bring you top-notch sports facilities.
-            </p>
-          </motion.div>
+    <section className="py-8 sm:py-16 bg-gray-50 dark:bg-dark-theme-lighter">
+      <div className="container px-2 sm:px-4">
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Our Partners</h2>
+          <p className="text-gray-600 dark:text-gray-300 mt-2 max-w-xl mx-auto text-sm sm:text-base">
+            We collaborate with the best turf venues across Tamil Nadu to bring you top-notch sports facilities.
+          </p>
+        </motion.div>
 
-          <div
-            ref={containerRef}
-            className="overflow-hidden"
-            onMouseEnter={() => handleHover(true)}
-            onMouseLeave={() => handleHover(false)}
-          >
-            <motion.div
-              style={{ x, y }}
-              className="flex gap-4 py-6"
-            >
-              {[...turfLogos, ...turfLogos, ...turfLogos].map((turf, index) => (
-                <motion.div
-                  ref={index === 0 ? logoRef : null}
-                  key={`${turf.name}-${index}`}
-                  className="flex-shrink-0 w-[18vw] h-[18vw] sm:w-[15vw] sm:h-[15vw] max-w-20 max-h-20 sm:max-w-24 sm:max-h-24 bg-white dark:bg-dark-theme-lightest rounded-full flex items-center justify-center relative"
-                  whileHover={{ 
-                    scale: 1.1, 
-                    transition: { type: 'spring', stiffness: 300, damping: 10 } 
-                  }}
-                >
-                  <img
-                    src={turf.logoUrl}
-                    alt={`${turf.name} logo`}
-                    className="max-w-[80%] max-h-[80%] object-contain pointer-events-none"
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
+        <div className="overflow-hidden py-6">
+          <div className="flex animate-scroll gap-4">
+            {[...turfLogos, ...turfLogos, ...turfLogos, ...turfLogos].map((turf, index) => (
+              <div
+                key={`${turf.name}-${index}`}
+                className="flex-shrink-0 w-[18vw] h-[18vw] sm:w-[15vw] sm:h-[15vw] max-w-20 max-h-20 sm:max-w-24 sm:max-h-24 bg-white dark:bg-dark-theme-lighter rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300"
+              >
+                <img
+                  src={turf.logoUrl}
+                  alt={`${turf.name} logo`}
+                  className="max-w-[80%] max-h-[80%] object-contain pointer-events-none"
+                />
+              </div>
+            ))}
           </div>
         </div>
-      </section>
+      </div>
+
+      <style>{`
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(calc(-18vw * ${turfLogos.length}));
+          }
+        }
+
+        .animate-scroll {
+          animation: scroll 30s linear infinite;
+          display: flex;
+          width: calc(18vw * ${turfLogos.length * 4});
+        }
+
+        .animate-scroll:hover {
+          animation-play-state: paused;
+        }
+
+        @media (min-width: 640px) {
+          .animate-scroll {
+            width: calc(15vw * ${turfLogos.length * 4});
+          }
+
+          @keyframes scroll {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(calc(-15vw * ${turfLogos.length}));
+            }
+          }
+        }
+      `}</style>
+    </section>
 
       {/* CTA */}
       <section className="py-8 sm:py-16 bg-gradient-to-r from-turf-700 to-sport-700 text-white font-sans">
@@ -486,7 +467,6 @@ const Index = () => {
   );
 };
 
-// Star component for testimonials
 const Star = ({ filled }: { filled: boolean }) => {
   return (
     <svg

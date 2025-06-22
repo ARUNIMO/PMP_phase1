@@ -21,9 +21,9 @@ const Login = () => {
   }, [theme]);
 
   return (
-    <div className="h-screen w-screen flex bg-gray-50 dark:bg-gray-900">
+    <div className="h-screen w-screen flex bg-gray-50 dark:bg-dark-theme-lighter">
       {/* Left side - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col p-6 justify-center relative bg-white dark:bg-gray-800">
+      <div className="w-full lg:w-1/2 flex flex-col p-6 justify-center relative bg-blue dark:bg-dark-theme-lightest">
         <div className="mb-4">
           <Link to="/" className="text-gray-500 dark:text-gray-300 flex items-center hover:text-gray-700 dark:hover:text-gray-100">
             <ArrowLeft size={16} className="mr-2" />

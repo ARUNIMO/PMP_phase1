@@ -16,44 +16,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BookingCalendar from '@/components/BookingCalendar';
 
-const allTurfs = [
-  {
-    id: '1',
-    name: 'Foot Work',
-    location: 'Kallimadai, Coimbatore',
-    rating: 4.8,
-    imageUrl: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4npFDLq_ymnmxbwTpTSgxmmk3vokbpjmfGCDicIWv4DV3FaIp_ds57eVCJjnH8kPwNB9bEackwj7TgmolKkoOzMjpgf2httzmFCFpOKsy4KWCSSLSUpX5Qz4AZeeWz_VBCWMfQCABQ=s0',
-    price: 1500,
-    sportTypes: ['Football'],
-  },
-  {
-    id: '2',
-    name: 'Sports Training & Fitness Unit',
-    location: 'Koundampalayam, Coimbatore',
-    rating: 4.6,
-    imageUrl: 'https://lh3.googleusercontent.com/p/AF1QipM0tpJkCZj8tusXgafhjxaqPcxoBGJoJI55X3-1',
-    price: 1400,
-    sportTypes: ['Football', 'Basketball', 'Frisbee', 'Crossfit'],
-  },
-  {
-    id: '3',
-    name: 'Tiki Taka',
-    location: 'T.Nagar, Chennai',
-    rating: 4.7,
-    imageUrl: 'https://lh3.googleusercontent.com/p/AF1QipP9ITtkorTsrLbWsHt6BUxS2GeguxK5n-S1jdjZ',
-    price: 1500,
-    sportTypes: ['Cricket', 'Football'],
-  },
-  {
-    id: '4',
-    name: 'Game On Sports Arena',
-    location: 'Egmore, Chennai',
-    rating: undefined,
-    imageUrl: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqVVijXJ2gXawJVrgpeXRKCSnI3rF-xUPRSd1X17X94VJ-gzO4xLqQBmA13fFNaSJNsFM2kBTAW7tE-Q2qVriYzCuiiB7oNeDHxHhQNSvsUbSv06A-1bee1roou1oBinNrQ3iw1',
-    price: 1500,
-    sportTypes: ['Cricket', 'Football'],
-  },
-];
+// Import turfs data from JSON file
+import turfsData from '@/data/turfs.json';
 
 const cities = ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem', 'Vellore'];
 
@@ -103,17 +67,17 @@ const BookTurf = () => {
   const [selectedSport, setSelectedSport] = useState('all');
   const [sortBy, setSortBy] = useState('none');
   const [selectedCity, setSelectedCity] = useState('all');
-  const [displayedTurfs, setDisplayedTurfs] = useState(allTurfs);
+  const [displayedTurfs, setDisplayedTurfs] = useState(turfsData);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const selectedTurf = allTurfs.find((turf) => turf.id === id);
+  const selectedTurf = turfsData.find((turf) => turf.id === id);
 
   useEffect(() => {
     document.title = id 
       ? `Book ${selectedTurf?.name || 'Turf'} - Sportify Turf` 
       : 'Book a Turf - Sportify Turf';
       
-    let filtered = [...allTurfs];
+    let filtered = [...turfsData];
     
     // Apply search filter
     if (searchQuery) {

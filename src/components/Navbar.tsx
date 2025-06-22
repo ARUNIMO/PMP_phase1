@@ -56,9 +56,15 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
     }
   };
 
+  const handleBookTurfClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigate('/book-turf');
+    window.scrollTo(0, 0); // Scroll to top of the page
+  };
+
   const navLinks = [
     { to: '/', label: 'Home' },
-    { to: '/book-turf', label: 'Book Turf' },
+    { to: '/book-turf', label: 'Book Turf', onClick: handleBookTurfClick },
     { to: '/about', label: 'About Us' },
     { to: '/contact', label: 'Contact' },
     { to: '/#testimonials', label: 'Testimonials', onClick: handleTestimonialsClick },
@@ -130,22 +136,22 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
                   isScrolled ? 'bg-gray-100 text-gray-800 placeholder-gray-500 dark:bg-dark-theme-lighter dark:text-gray-200 dark:placeholder-gray-400' : ''
                 )}
               />
-<svg
-  className={cn(
-    'absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 w-4 h-4',
-    overrideTextColor || (isScrolled ? 'text-gray-500 dark:text-gray-400' : 'text-white/70')
-  )}
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  strokeWidth="2.5"
-  strokeLinecap="round"
-  strokeLinejoin="round"
->
-  <circle cx="11" cy="11" r="8" />
-  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-</svg>
+              <svg
+                className={cn(
+                  'absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 w-4 h-4',
+                  overrideTextColor || (isScrolled ? 'text-gray-500 dark:text-gray-400' : 'text-white/70')
+                )}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
             </div>
             <button
               onClick={toggleTheme}
@@ -227,9 +233,9 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
               </div>
             </div>
             {navLinks.map((link) => (
