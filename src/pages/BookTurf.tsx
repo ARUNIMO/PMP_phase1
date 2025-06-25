@@ -69,6 +69,8 @@ const BookTurf = () => {
   const [selectedCity, setSelectedCity] = useState('all');
   const [displayedTurfs, setDisplayedTurfs] = useState(turfsData);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const turfsPerPage = 30;
 
   const selectedTurf = turfsData.find((turf) => turf.id === id);
 
@@ -110,6 +112,7 @@ const BookTurf = () => {
     }
     
     setDisplayedTurfs(filtered);
+    setCurrentPage(1); // Reset to page 1 when filters change
   }, [id, searchQuery, selectedSport, sortBy, selectedCity, selectedTurf?.name]);
 
   const handleSearch = (e) => {
@@ -133,6 +136,18 @@ const BookTurf = () => {
     setSelectedSport('all');
     setSortBy('none');
     setSelectedCity('all');
+    setCurrentPage(1);
+  };
+
+  // Pagination logic
+  const totalPages = Math.ceil(displayedTurfs.length / turfsPerPage);
+  const startIndex = (currentPage - 1) * turfsPerPage;
+  const endIndex = startIndex + turfsPerPage;
+  const currentTurfs = displayedTurfs.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
   };
 
   if (id && selectedTurf) {
@@ -295,7 +310,7 @@ const BookTurf = () => {
               <span className="text-sm text-gray-500 dark:text-gray-400">Active filters:</span>
               {searchQuery && (
                 <div className="bg-gray-100 dark:bg-dark-theme text-gray-800 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center">
-                  <span className="mr-1">"{searchQuery}"</span>
+                  <span className="mr-2">"{searchQuery}"</span>
                   <button 
                     onClick={() => setSearchQuery('')}
                     className="ml-1"
@@ -307,7 +322,7 @@ const BookTurf = () => {
               )}
               {selectedSport !== 'all' && (
                 <div className="bg-gray-100 dark:bg-dark-theme text-gray-800 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center">
-                  <span>Sport: {selectedSport}</span>
+                  <span className="mr-2">Sport: {selectedSport}</span>
                   <button 
                     onClick={() => setSelectedSport('all')}
                     className="ml-1"
@@ -319,7 +334,7 @@ const BookTurf = () => {
               )}
               {sortBy !== 'none' && (
                 <div className="bg-gray-100 dark:bg-dark-theme text-gray-800 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center">
-                  <span>
+                  <span className="mr-2">
                     Sort: {sortBy === 'price-asc' ? 'Price (Low to High)' : 'Price (High to Low)'}
                   </span>
                   <button 
@@ -333,7 +348,7 @@ const BookTurf = () => {
               )}
               {selectedCity !== 'all' && (
                 <div className="bg-gray-100 dark:bg-dark-theme text-gray-800 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center">
-                  <span>City: {selectedCity}</span>
+                  <span className="mr-2">City: {selectedCity}</span>
                   <button 
                     onClick={() => setSelectedCity('all')}
                     className="ml-1"
@@ -365,7 +380,7 @@ const BookTurf = () => {
             
             <TabsContent value="grid" className="mt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {displayedTurfs.map((turf) => (
+                {currentTurfs.map((turf) => (
                   <TurfCardComponent key={turf.id} {...turf} />
                 ))}
               </div>
@@ -373,31 +388,31 @@ const BookTurf = () => {
             
             <TabsContent value="list" className="mt-6">
               <div className="space-y-4">
-                {displayedTurfs.map((turf) => {
+                {currentTurfs.map((turf) => {
                   const isRatingBlank = turf.rating === undefined || turf.rating === null || turf.rating === 0;
                   return (
-                    <Card key={turf.id} className="overflow-hidden h-full flex flex-col sm:flex-row min-h-[300px] transition-transform duration-300 hover:scale-100 group bg-white dark:bg-dark-theme-lightest border-gray-100 dark:border-gray-600">
+                    <Card key={turf.id} className="overflow-hidden flex flex-col sm:flex-row min-h-[200px] transition-transform duration-300 hover:scale-100 group bg-white dark:bg-dark-theme-lightest border-gray-100 dark:border-gray-600">
                       <div className="relative h-56 sm:h-auto sm:w-1/3 overflow-hidden">
                         <img 
                           src={turf.imageUrl} 
                           alt={turf.name} 
-                          className="w-full h-full object-cover transition-transform duration-300 delay-300 group-hover:scale-100"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-100"
                         />
                         <div className="absolute top-2 right-2 bg-white dark:bg-dark-theme-lightest px-2 py-1 rounded-full flex items-center">
                           <Star size={14} className="text-yellow-500 fill-yellow-500 mr-1" />
-                          <span className={`text-xs font-medium ${isRatingBlank ? 'text-black dark:text-white' : 'text-gray-700 dark:text-gray-200'}`}>
+                          <span className={`text-xs font-medium ${isRatingBlank ? 'text-black dark:text-white' : 'text-gray-700 dark:text-gray-200'}`} aria-label="Rating">
                             {turf.rating ?? 'N/A'}
                           </span>
                         </div>
                       </div>
                       <div className="p-3 sm:p-4 flex-1 flex flex-col">
                         <div className="flex-grow">
-                          <div className="flex justify-between items-start mb-1">
+                          <div className="flex justify-between items-start mb-2">
                             <div>
                               <h3 className="font-semibold text-lg truncate text-gray-900 dark:text-white">{turf.name}</h3>
-                              <div className="flex items-center text-gray-500 dark:text-gray-400 mt-0.5">
+                              <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                                 <MapPin size={14} className="mr-1" />
-                                <span className="text-xs">{turf.location}</span>
+                                <span>{turf.location}</span>
                               </div>
                             </div>
                           </div>
@@ -412,12 +427,15 @@ const BookTurf = () => {
                             ))}
                           </div>
                         </div>
-                        <div className="flex items-center justify-between mt-3">
+                        <div className="flex items-center justify-between mt-4">
                           <div>
                             <p className="text-turf-700 dark:text-turf-300 font-bold text-lg">₹{turf.price}</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs">per hour</p>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">per hour</p>
                           </div>
-                          <Button className="flex items-center gap-1 text-xs bg-turf-600 dark:bg-turf-700 hover:bg-turf-700 dark:hover:bg-turf-600 text-white" asChild>  
+                          <Button 
+                            className="flex items-center gap-1 text-xs bg-turf-600 dark:bg-turf-700 hover:bg-turf-700 dark:hover:bg-turf-600 text-white" 
+                            asChild
+                          >
                             <Link to={`/book-turf/${turf.id}`}>
                               Book Now
                               <ArrowRight size={14} className="ml-1" />
@@ -438,6 +456,47 @@ const BookTurf = () => {
               <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">No turfs found</h3>
               <p className="text-gray-500 dark:text-gray-400 mb-4">Try adjusting your search or filter criteria.</p>
               <Button onClick={clearFilters} className="bg-turf-600 dark:bg-turf-700 hover:bg-turf-700 dark:hover:bg-turf-600 text-white">Clear Filters</Button>
+            </div>
+          )}
+          
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+                aria-label="Previous page"
+              >
+                Previous
+              </Button>
+              <div className="flex gap-1">
+                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                  <Button
+                    key={page}
+                    variant={page === currentPage ? "default" : "outline"}
+                    onClick={() => handlePageChange(page)}
+                    className={
+                      page === currentPage
+                        ? "bg-turf-600 dark:bg-turf-700 text-white dark:text-white hover:bg-turf-700 dark:hover:bg-turf-600"
+                        : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    }
+                    aria-label={`Go to page ${page}`}
+                  >
+                    {page}
+                  </Button>
+                ))}
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+                aria-label="Next page"
+              >
+                Next
+              </Button>
             </div>
           )}
         </div>

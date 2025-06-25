@@ -268,5 +268,14 @@
     "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqVVijXJ2gXawJVrgpeXRKCSnI3rF-xUPRSd1X17X94VJ-gzO4xLqQBmA13fFNaSJNsFM2kBTAW7tE-Q2qVriYzCuiiB7oNeDHxHhQNSvsUbSv06A-1bee1roou1oBinNrQ3iw1",
     "price": 1500,
     "sportTypes": ["Football","Cricket"]
+  },
+  {
+    "id":"31",
+    "name":"Techies Turf Sports",
+    "location":"Siva Sakti Nagar, Coimbatore",
+    "rating": 4.8,
+    "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqVVijXJ2gXawJVrgpeXRKCSnI3rF-xUPRSd1X17X94VJ-gzO4xLqQBmA13fFNaSJNsFM2kBTAW7tE-Q2qVriYzCuiiB7oNeDHxHhQNSvsUbSv06A-1bee1roou1oBinNrQ3iw1",
+    "price": 1500,
+    "sportTypes": ["Football","Cricket"]
   }
 ]
