@@ -17,6 +17,7 @@ const About = () => {
   };
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 

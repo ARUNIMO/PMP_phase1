@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, Clock } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, Phone } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -10,7 +10,14 @@ interface TimeSlot {
   isAvailable: boolean;
 }
 
-const BookingCalendar = () => {
+interface BookingCalendarProps {
+  selectedTurf: {
+    ownerContact: string;
+    sportTypes: string[];
+  } | null;
+}
+
+const BookingCalendar = ({ selectedTurf }: BookingCalendarProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
 
@@ -24,6 +31,11 @@ const BookingCalendar = () => {
     localStorage.setItem('theme', newTheme);
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
   };
+
+  // Auto-scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo({ top: 100, behavior: 'smooth' });
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');

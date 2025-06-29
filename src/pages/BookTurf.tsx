@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ChevronLeft, MapPin, Search, Filter, Star, X, Info, ArrowRight, Check } from 'lucide-react';
+import { ChevronLeft, MapPin, Search, Filter, Star, X, Info, ArrowRight, Check, Phone } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,7 +22,7 @@ import turfsData from '@/data/turfs.json';
 const cities = ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem', 'Vellore'];
 
 // TurfCard Component
-const TurfCardComponent = ({ name, location, rating, imageUrl, price, sportTypes, id }) => {
+const TurfCardComponent = ({ name, location, rating, imageUrl, price, sportTypes, id, ownerContact }) => {
   const isRatingBlank = rating === undefined || rating === null || rating === 0;
 
   return (
@@ -43,12 +43,18 @@ const TurfCardComponent = ({ name, location, rating, imageUrl, price, sportTypes
       <CardContent className="p-3 flex flex-col flex-grow">
         <h3 className="text-base font-semibold mb-1 text-gray-900 dark:text-white">{name}</h3>
         <p className="text-gray-500 dark:text-gray-400 text-xs mb-1">{location}</p>
-        <div className="flex flex-wrap gap-1 mb-2">
-          {sportTypes.map((sport, index) => (
-            <span key={index} className="bg-turf-50 dark:bg-turf-700 text-turf-700 dark:text-turf-300 px-2 py-0.5 rounded-full text-[10px]">
-              {sport}
-            </span>
-          ))}
+        <div className="flex justify-between items-center mb-2">
+          <div className="flex flex-wrap gap-1">
+            {sportTypes.map((sport, index) => (
+              <span key={index} className="bg-turf-50 dark:bg-turf-700 text-turf-700 dark:text-turf-300 px-2 py-0.5 rounded-full text-[10px]">
+                {sport}
+              </span>
+            ))}
+          </div>
+          <div className="flex items-center text-gray-700 dark:text-gray-300">
+            <Phone size={14} className="mr-1 text-turf-600 dark:text-turf-300" />
+            <span className="text-xs font-medium">{ownerContact ?? 'N/A'}</span>
+          </div>
         </div>
         <div className="mt-auto flex justify-between items-center">
           <p className="text-turf-700 dark:text-turf-300 font-bold text-sm">₹{price}/hr</p>
@@ -67,20 +73,59 @@ const BookTurf = () => {
   const [selectedSport, setSelectedSport] = useState('all');
   const [sortBy, setSortBy] = useState('none');
   const [selectedCity, setSelectedCity] = useState('all');
-  const [displayedTurfs, setDisplayedTurfs] = useState(turfsData);
+  const [displayedTurfs, setDisplayedTurfs] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const turfsPerPage = 30;
 
-  const selectedTurf = turfsData.find((turf) => turf.id === id);
+  // Flatten turfs from regions for easier processing
+  const allTurfs = turfsData.flatMap(region => region.turfs);
+  const selectedTurf = allTurfs.find((turf) => turf.id === id);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     document.title = id 
       ? `Book ${selectedTurf?.name || 'Turf'} - Sportify Turf` 
       : 'Book a Turf - Sportify Turf';
-      
-    let filtered = [...turfsData];
     
+    // Helper function to shuffle array (Fisher-Yates shuffle)
+    const shuffleArray = (array) => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
+    // Group turfs by city
+    const turfsByCity = {};
+    turfsData.forEach((region) => {
+      turfsByCity[region.region] = [...region.turfs];
+    });
+
+    // Select 5 turfs per city for the first page
+    const cities = ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem', 'Vellore'];
+    let firstPageTurfs = [];
+    cities.forEach((city) => {
+      const cityTurfs = turfsByCity[city] || [];
+      const shuffledCityTurfs = shuffleArray(cityTurfs);
+      firstPageTurfs = [...firstPageTurfs, ...shuffledCityTurfs.slice(0, 5)];
+    });
+
+    // Collect remaining turfs
+    const remainingTurfs = [];
+    cities.forEach((city) => {
+      const cityTurfs = turfsByCity[city] || [];
+      remainingTurfs.push(...cityTurfs.slice(5));
+    });
+
+    // Shuffle remaining turfs for subsequent pages
+    const shuffledRemainingTurfs = shuffleArray(remainingTurfs);
+
+    // Combine first page and remaining turfs
+    let filtered = [...firstPageTurfs, ...shuffledRemainingTurfs];
+
     // Apply search filter
     if (searchQuery) {
       filtered = filtered.filter(
@@ -173,7 +218,7 @@ const BookTurf = () => {
                     />
                     <div className="absolute top-3 right-3 bg-white dark:bg-dark-theme-lightest px-2 py-1 rounded-full flex items-center">
                       <Star size={16} className="text-yellow-500 fill-yellow-500 mr-1" />
-                      <span className="font-medium text-gray-700 dark:text-gray-200">{selectedTurf.rating}</span>
+                      <span className="font-medium text-gray-700 dark:text-gray-200">{selectedTurf.rating ?? 'N/A'}</span>
                     </div>
                   </div>
                   
@@ -184,15 +229,21 @@ const BookTurf = () => {
                       <span>{selectedTurf.location}</span>
                     </div>
                     
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {selectedTurf.sportTypes.map((sport, index) => (
-                        <span 
-                          key={index} 
-                          className="bg-turf-50 dark:bg-turf-700 text-turf-700 dark:text-turf-300 px-3 py-1 rounded-full text-sm"
-                        >
-                          {sport}
-                        </span>
-                      ))}
+                    <div className="flex justify-between items-center mb-6">
+                      <div className="flex flex-wrap gap-2">
+                        {selectedTurf.sportTypes.map((sport, index) => (
+                          <span 
+                            key={index} 
+                            className="bg-turf-50 dark:bg-turf-700 text-turf-700 dark:text-turf-300 px-3 py-1 rounded-full text-sm"
+                          >
+                            {sport}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex items-center text-gray-700 dark:text-gray-300">
+                        <Phone size={16} className="mr-2 text-turf-600 dark:text-turf-300" />
+                        <span className="text-sm font-medium">{selectedTurf.ownerContact ?? 'N/A'}</span>
+                      </div>
                     </div>
                     
                     <div className="border-t border-gray-100 dark:border-gray-600 pt-4">
@@ -217,7 +268,7 @@ const BookTurf = () => {
               </div>
               
               <div className="lg:col-span-3">
-                <BookingCalendar />
+                <BookingCalendar selectedTurf={selectedTurf} />
               </div>
             </div>
           </div>
@@ -276,7 +327,7 @@ const BookTurf = () => {
                   <SelectItem value="Tennis">Tennis</SelectItem>
                   <SelectItem value="Basketball">Basketball</SelectItem>
                   <SelectItem value="Badminton">Badminton</SelectItem>
-                  <SelectItem value="Golf">Golf</SelectItem>
+                  <SelectItem value="Volleyball">Volleyball</SelectItem>
                 </SelectContent>
               </Select>
               
@@ -284,7 +335,7 @@ const BookTurf = () => {
                 <SelectTrigger className="w-[180px] bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
                   <SelectValue placeholder="Select City" />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                <SelectContent className="bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-grainy-600 text-gray-900 dark:text-gray-200">
                   <SelectItem value="all">All Cities</SelectItem>
                   {cities.map((city) => (
                     <SelectItem key={city} value={city}>{city}</SelectItem>
@@ -416,15 +467,21 @@ const BookTurf = () => {
                               </div>
                             </div>
                           </div>
-                          <div className="flex flex-wrap gap-1 mt-2">
-                            {turf.sportTypes.map((sport, index) => (
-                              <span 
-                                key={index} 
-                                className="text-[10px] bg-turf-50 dark:bg-turf-700 text-turf-700 dark:text-turf-300 px-2 py-0.5 rounded-full"
-                              >
-                                {sport}
-                              </span>
-                            ))}
+                          <div className="flex justify-between items-center mt-2">
+                            <div className="flex flex-wrap gap-1">
+                              {turf.sportTypes.map((sport, index) => (
+                                <span 
+                                  key={index} 
+                                  className="text-[10px] bg-turf-50 dark:bg-turf-700 text-turf-700 dark:text-turf-300 px-2 py-0.5 rounded-full"
+                                >
+                                  {sport}
+                                </span>
+                              ))}
+                            </div>
+                            <div className="flex items-center text-gray-700 dark:text-gray-300">
+                              <Phone size={14} className="mr-1 text-turf-600 dark:text-turf-300" />
+                              <span className="text-xs font-medium">{turf.ownerContact ?? 'N/A'}</span>
+                            </div>
                           </div>
                         </div>
                         <div className="flex items-center justify-between mt-4">
