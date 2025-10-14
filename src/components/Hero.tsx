@@ -67,7 +67,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center bg-turf-pattern overflow-hidden">
+    <div className="relative h-screen flex flex-col justify-between items-center bg-turf-pattern overflow-hidden">
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
         style={{
@@ -78,15 +78,15 @@ const Hero = () => {
       ></div>
       <div className="absolute inset-0 bg-black/40"></div>
 
-      {/* Content */}
+      {/* Main Content */}
       <motion.div 
-        className="container relative z-10 text-white px-4"
+        className="container relative z-10 text-white px-4 pt-20"
         variants={container}
         initial="hidden"
         animate="show"
       >
         <div className="max-w-3xl mx-auto text-center">
-          <motion.div className="h-12 md:h-16 mb-4 text-turf-300 text-3xl md:text-5xl font-bold" variants={item}>
+          <motion.div className="h-12 md:h-16 mb-4 text-turf-300 text-3xl md:text-5xl font-bold py-16" variants={item}>
             <span className="inline-block border-r-4 border-turf-400 animate-pulse" style={{ color: 'rgb(2, 170, 221)' }}>
               {displayText}
             </span>
@@ -102,7 +102,7 @@ const Hero = () => {
             No hassle, just play.
           </motion.p>
 
-          <motion.div 
+          {/* <motion.div 
             className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
             variants={item}
           >
@@ -138,28 +138,33 @@ const Hero = () => {
               Search
               <span className="ml-2 opacity-80 group-hover:opacity-100 transition-opacity">→</span>
             </Button>
-          </motion.div>
-
-          <motion.div variants={item}>
-            <Link 
-              to="/about" 
-              className="inline-flex items-center text-white hover:text-turf-300 transition-colors group ml-[-10px] mt-[10px]"
-            >
-              Learn more about us
-              <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
-            </Link>
-          </motion.div>
+          </motion.div> */}
         </div>
+      </motion.div>
+
+      {/* Bottom Section */}
+      <div className="relative z-10 text-center pb-8 w-full">
+        <motion.div 
+          className="mb-6" 
+          variants={item}
+        >
+          <Link 
+            to="/about" 
+            className="inline-flex items-center text-white hover:text-turf-300 transition-colors group py-[6px] px-3 rounded-lg border border-white/30 hover:bg-white/10"
+          >
+            Learn more about us
+            <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+          </Link>
+        </motion.div>
 
         <motion.div
-          className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+2rem)]"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.5 }}
         >
           <motion.button
             onClick={scrollToFeatures}
-            className="p-2 rounded-full hover:bg-white/10 transition-colors flex items-center justify-center ml-[-35px]"
+            className="p-2 rounded-full hover:bg-white/10 transition-colors flex items-center justify-center ml-[740px]"
             aria-label="Scroll to features"
             animate={{ y: [0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
@@ -167,7 +172,7 @@ const Hero = () => {
             <ArrowDownCircle size={36} className="text-white" />
           </motion.button>
         </motion.div>
-      </motion.div>
+      </div>
     </div>
   );
 };
