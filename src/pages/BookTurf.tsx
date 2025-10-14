@@ -76,6 +76,7 @@ const BookTurf = () => {
   const [displayedTurfs, setDisplayedTurfs] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeTab, setActiveTab] = useState('grid');
   const turfsPerPage = 30;
 
   // Flatten turfs from regions for easier processing
@@ -158,7 +159,7 @@ const BookTurf = () => {
     
     setDisplayedTurfs(filtered);
     setCurrentPage(1); // Reset to page 1 when filters change
-  }, [id, searchQuery, selectedSport, sortBy, selectedCity, selectedTurf?.name]);
+  }, [id, searchQuery, selectedSport, sortBy, selectedCity]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -309,7 +310,7 @@ const BookTurf = () => {
             <div className="flex gap-2 w-full md:w-auto">
               <Button 
                 variant="outline" 
-                className="flex items-center gap-2 bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+                className="flex items-center gap-2 hover:bg-transparent hover:border-transparent hover:text-current"
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
               >
                 <Filter size={16} />
@@ -348,7 +349,7 @@ const BookTurf = () => {
                   <SelectValue placeholder="Sort By" />
                 </SelectTrigger>
                 <SelectContent className="bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
-                  <SelectItem value="none">None</SelectItem>
+                  <SelectItem value="none">Sort By</SelectItem>
                   <SelectItem value="price-asc">Price (Low to High)</SelectItem>
                   <SelectItem value="price-desc">Price (High to Low)</SelectItem>
                 </SelectContent>
@@ -418,7 +419,7 @@ const BookTurf = () => {
             </div>
           )}
           
-          <Tabs defaultValue="grid" className="mb-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
             <div className="flex justify-between items-center">
               <span className="text-gray-500 dark:text-gray-400">
                 {displayedTurfs.length} {displayedTurfs.length === 1 ? 'result' : 'results'} found
@@ -430,7 +431,7 @@ const BookTurf = () => {
             </div>
             
             <TabsContent value="grid" className="mt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" key={`grid-${displayedTurfs.length}-${currentPage}`}>
                 {currentTurfs.map((turf) => (
                   <TurfCardComponent key={turf.id} {...turf} />
                 ))}
@@ -438,7 +439,7 @@ const BookTurf = () => {
             </TabsContent>
             
             <TabsContent value="list" className="mt-6">
-              <div className="space-y-4">
+              <div className="space-y-4" key={`list-${displayedTurfs.length}-${currentPage}`}>
                 {currentTurfs.map((turf) => {
                   const isRatingBlank = turf.rating === undefined || turf.rating === null || turf.rating === 0;
                   return (
