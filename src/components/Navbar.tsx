@@ -106,7 +106,7 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
         <div className="hidden md:flex items-center justify-between w-full ml-10 lg:ml-14">
           <NavigationMenu>
             <NavigationMenuList className={cn(
-              'flex gap-2 md:gap-2',
+              'flex gap-2 md:gap-5',
               location.pathname !== '/' && 'w-full justify-between md:gap-4'
             )}>
               <AnimatePresence>
@@ -139,7 +139,7 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
               </AnimatePresence>
             </NavigationMenuList>
           </NavigationMenu>
-          <div className="flex items-center gap-4 md:gap-7 flex-1 justify-end">
+          <div className="flex items-center gap-4 md:gap-12 flex-1 justify-end">
             <div className="relative">
               <input
                 type="text"
@@ -171,10 +171,7 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
             <Button
               variant="ghost"
               size="sm"
-              className={cn(
-                'flex items-center gap-1 transition-all hover:scale-105 whitespace-nowrap text-sm md:text-base',
-                overrideTextColor || (isScrolled ? 'text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-theme-lighter' : 'text-white hover:bg-white/10')
-              )}
+              className="bg-gradient-to-r from-turf-600 to-sport-600 hover:from-turf-700 hover:to-sport-700 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105 whitespace-nowrap text-sm md:text-base"
               asChild
             >
               <Link to="/login">
@@ -182,7 +179,7 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
                 Login
               </Link>
             </Button>
-            <Button
+            {/* <Button
               size="sm"
               className="bg-gradient-to-r from-turf-600 to-sport-600 hover:from-turf-700 hover:to-sport-700 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105 whitespace-nowrap text-sm md:text-base"
               asChild
@@ -191,7 +188,7 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
                 <User size={14} className="mr-1" />
                 Sign Up
               </Link>
-            </Button>
+            </Button> */}
           </div>
         </div>
 
