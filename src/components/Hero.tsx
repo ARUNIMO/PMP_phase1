@@ -3,7 +3,7 @@ import { ArrowDownCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import TurfBg from '../assets/images/turf-bg.webp';
+import TurfBg from '../assets/images/turf-bg.jpg';
 
 const Hero = () => {
   const [displayText, setDisplayText] = useState('');
