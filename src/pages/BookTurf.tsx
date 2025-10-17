@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ChevronLeft, MapPin, Search, Filter, Star, X, Info, ArrowRight, Check, Phone } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,7 +19,20 @@ import BookingCalendar from '@/components/BookingCalendar';
 // Import turfs data from JSON file
 import turfsData from '@/data/turfs.json';
 
-const cities = ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem', 'Vellore'];
+const cities = ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem', 'Hyderabad'];
+
+// Haversine formula to calculate distance between two lat/long points in km
+const haversineDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // Earth's radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
 
 // TurfCard Component
 const TurfCardComponent = ({ name, location, rating, imageUrl, price, sportTypes, id, ownerContact }) => {
@@ -77,55 +90,87 @@ const BookTurf = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState('grid');
+  const [userLocation, setUserLocation] = useState(null); // { lat, lon, city }
+  const [locationError, setLocationError] = useState(false); // Flag for location error message
   const turfsPerPage = 30;
 
-  // Flatten turfs from regions for easier processing
-  const allTurfs = turfsData.flatMap(region => region.turfs);
+  // Memoize allTurfs to prevent recreation on every render
+  const allTurfs = useMemo(() => 
+    turfsData.flatMap(region => 
+      region.turfs.map(turf => ({ ...turf, city: region.region }))
+    ), 
+  []);
+
   const selectedTurf = allTurfs.find((turf) => turf.id === id);
 
+  // Request user location on component mount
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (navigator.geolocation && !userLocation) {
+      // Check for secure context
+      const isSecureContext = window.location.protocol === 'https:' || 
+        ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
+      
+      if (!isSecureContext) {
+        console.warn('Geolocation requires a secure context (HTTPS or localhost). See: https://developer.chrome.com/blog/geolocation-on-https/');
+        setLocationError(true);
+        setUserLocation(null);
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              const city = data.address?.city || data.address?.town || data.address?.municipality || data.address?.county || 'Unknown';
+              setUserLocation({ lat: latitude, lon: longitude, city });
+              setLocationError(false);
+            })
+            .catch((error) => {
+              console.error('Reverse geocoding error:', error);
+              setUserLocation({ lat: latitude, lon: longitude, city: 'Unknown' });
+              setLocationError(false);
+            });
+        },
+        (error) => {
+          console.log('Geolocation access denied or error:', error);
+          setLocationError(true);
+          setUserLocation(null);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 600000 }
+      );
+    }
+  }, [userLocation]);
+
+  useEffect(() => {
+    // Only scroll to top on initial load or when id changes (for single turf view)
+    if (!id) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     document.title = id 
       ? `Book ${selectedTurf?.name || 'Turf'} - Sportify Turf` 
       : 'Book a Turf - Sportify Turf';
     
-    // Helper function to shuffle array (Fisher-Yates shuffle)
-    const shuffleArray = (array) => {
-      const shuffled = [...array];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
-    };
+    // Prepare initial turfs based on user location
+    let initialTurfs;
+    if (userLocation && userLocation.city !== 'Unknown') {
+      const sameCityTurfs = allTurfs.filter((turf) => turf.city === userLocation.city);
+      const otherTurfs = allTurfs.filter((turf) => turf.city !== userLocation.city);
+      otherTurfs.sort((a, b) => {
+        const distA = haversineDistance(userLocation.lat, userLocation.lon, a.latitude, a.longitude);
+        const distB = haversineDistance(userLocation.lat, userLocation.lon, b.latitude, b.longitude);
+        return distA - distB;
+      });
+      initialTurfs = [...sameCityTurfs, ...otherTurfs];
+    } else {
+      // Default: sort alphabetically by name
+      initialTurfs = [...allTurfs].sort((a, b) => a.name.localeCompare(b.name));
+    }
 
-    // Group turfs by city
-    const turfsByCity = {};
-    turfsData.forEach((region) => {
-      turfsByCity[region.region] = [...region.turfs];
-    });
-
-    // Select 5 turfs per city for the first page
-    const cities = ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem', 'Vellore'];
-    let firstPageTurfs = [];
-    cities.forEach((city) => {
-      const cityTurfs = turfsByCity[city] || [];
-      const shuffledCityTurfs = shuffleArray(cityTurfs);
-      firstPageTurfs = [...firstPageTurfs, ...shuffledCityTurfs.slice(0, 5)];
-    });
-
-    // Collect remaining turfs
-    const remainingTurfs = [];
-    cities.forEach((city) => {
-      const cityTurfs = turfsByCity[city] || [];
-      remainingTurfs.push(...cityTurfs.slice(5));
-    });
-
-    // Shuffle remaining turfs for subsequent pages
-    const shuffledRemainingTurfs = shuffleArray(remainingTurfs);
-
-    // Combine first page and remaining turfs
-    let filtered = [...firstPageTurfs, ...shuffledRemainingTurfs];
+    let filtered = initialTurfs;
 
     // Apply search filter
     if (searchQuery) {
@@ -146,7 +191,7 @@ const BookTurf = () => {
     // Apply city filter when a city is selected
     if (selectedCity !== 'all') {
       filtered = filtered.filter(
-        (turf) => turf.location.includes(selectedCity)
+        (turf) => turf.city === selectedCity
       );
     }
     
@@ -159,7 +204,7 @@ const BookTurf = () => {
     
     setDisplayedTurfs(filtered);
     setCurrentPage(1); // Reset to page 1 when filters change
-  }, [id, searchQuery, selectedSport, sortBy, selectedCity]);
+  }, [id, searchQuery, selectedSport, sortBy, selectedCity, userLocation, allTurfs]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -336,7 +381,7 @@ const BookTurf = () => {
                 <SelectTrigger className="w-[180px] bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
                   <SelectValue placeholder="Select City" />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-grainy-600 text-gray-900 dark:text-gray-200">
+                <SelectContent className="bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
                   <SelectItem value="all">All Cities</SelectItem>
                   {cities.map((city) => (
                     <SelectItem key={city} value={city}>{city}</SelectItem>
@@ -418,6 +463,24 @@ const BookTurf = () => {
               </button>
             </div>
           )}
+
+          {/* Location error message */}
+          {locationError && (
+            <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+              <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                Location access unavailable. Please use HTTPS or localhost for nearby recommendations, or select a city manually.
+              </p>
+            </div>
+          )}
+
+          {/* Location-based message */}
+          {userLocation && userLocation.city !== 'Unknown' && (
+            <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-sm text-blue-700 dark:text-blue-300">
+                Showing turfs near you in <strong>{userLocation.city}</strong>
+              </p>
+            </div>
+          )}
           
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
             <div className="flex justify-between items-center">
@@ -443,12 +506,12 @@ const BookTurf = () => {
                 {currentTurfs.map((turf) => {
                   const isRatingBlank = turf.rating === undefined || turf.rating === null || turf.rating === 0;
                   return (
-                    <Card key={turf.id} className="overflow-hidden flex flex-col sm:flex-row min-h-[200px] transition-transform duration-300 hover:scale-100 group bg-white dark:bg-dark-theme-lightest border-gray-100 dark:border-gray-600">
+                    <Card key={turf.id} className="overflow-hidden flex flex-col sm:flex-row min-h-[200px] transition-transform duration-300 hover:scale-105 group bg-white dark:bg-dark-theme-lightest border-gray-100 dark:border-gray-600">
                       <div className="relative h-56 sm:h-auto sm:w-1/3 overflow-hidden">
                         <img 
                           src={turf.imageUrl} 
                           alt={turf.name} 
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-100"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         />
                         <div className="absolute top-2 right-2 bg-white dark:bg-dark-theme-lightest px-2 py-1 rounded-full flex items-center">
                           <Star size={14} className="text-yellow-500 fill-yellow-500 mr-1" />
