@@ -73,10 +73,9 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-sm',
-        isScrolled ? 'bg-white dark:bg-dark-theme shadow-md py-1 sm:py-2' : 'bg-transparent py-3 sm:py-4'
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md border-b border-transparent',
+        isScrolled ? 'bg-pitch-navy/80 border-white/10 shadow-lg py-2 sm:py-3' : 'bg-transparent py-4 sm:py-5'
       )}
-      style={{ opacity: isScrolled ? 1 : 0.95 }}
     >
       <div className="container px-2 sm:px-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
@@ -85,7 +84,7 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
             whileHover={{ rotate: 360, transition: { duration: 0.6 } }}
-            className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-turf-500 to-sport-600 rounded-full flex items-center justify-center"
+            className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-pitch-teal to-pitch-orange rounded-full flex items-center justify-center"
           >
             <span className="text-white font-bold text-base sm:text-lg">PP</span>
           </motion.div>
@@ -95,7 +94,7 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
             transition={{ duration: 0.3 }}
             className={cn(
               'font-bold text-lg sm:text-xl tracking-tight transition-colors',
-              overrideTextColor || (isScrolled ? 'text-turf-800 dark:text-white' : 'text-white')
+              overrideTextColor || 'text-white'
             )}
           >
             PickMyPitch
@@ -125,10 +124,8 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
                         className={cn(
                           'font-medium px-3 md:px-4 py-1.5 md:py-2 rounded-md transition-colors flex items-center gap-1 whitespace-nowrap text-sm md:text-base',
                           location.pathname === link.to || (link.to === '/#testimonials' && location.hash === '#testimonials')
-                            ? 'bg-turf-100 text-turf-800 dark:bg-dark-theme-lighter dark:text-white relative after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-turf-800 dark:after:bg-white'
-                            : overrideTextColor || (isScrolled
-                              ? 'text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-theme-lighter'
-                              : 'text-white hover:bg-white/10')
+                            ? 'text-pitch-teal relative after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-pitch-teal'
+                            : overrideTextColor || 'text-gray-300 hover:text-white hover:bg-white/5'
                         )}
                       >
                         {link.label}
@@ -146,36 +143,32 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
                 placeholder="Search turfs..."
                 className={cn(
                   location.pathname === '/' ? 'w-36 md:w-60' : 'w-48 md:w-80',
-                  'pl-8 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2 rounded-md bg-white/10 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-turf-500 text-sm md:text-base',
-                  isScrolled ? 'bg-gray-100 text-gray-800 placeholder-gray-500 dark:bg-dark-theme-lighter dark:text-gray-200 dark:placeholder-gray-400' : ''
+                  'pl-8 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2 rounded-md bg-white/5 border border-white/10 text-white placeholder-white/50 focus:outline-none focus:ring-1 focus:ring-pitch-teal focus:bg-white/10 transition-all text-sm md:text-base'
                 )}
               />
               <Search
                 className={cn(
-                  'absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 w-4 h-4',
-                  overrideTextColor || (isScrolled ? 'text-gray-500 dark:text-gray-400' : 'text-white/70')
+                  'absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/50'
                 )}
               />
             </div>
             <button
               onClick={toggleTheme}
-              className="p-1.5 md:p-2 rounded-full hover:bg-black/10 dark:hover:bg-dark-theme-lighter"
+              className="p-1.5 md:p-2 rounded-full hover:bg-white/10 transition-colors"
               aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
             >
               {theme === 'light' ? (
-                <Moon size={18} className={cn('text-gray-800 dark:text-gray-200', overrideTextColor)} />
+                <Moon size={18} className="text-gray-300" />
               ) : (
-                <Sun size={18} className={cn('text-gray-800 dark:text-gray-200', overrideTextColor)} />
+                <Sun size={18} className="text-gray-300" />
               )}
             </button>
             <Button
-              variant="ghost"
               size="sm"
-              className="bg-gradient-to-r from-turf-600 to-sport-600 hover:from-turf-700 hover:to-sport-700 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105 whitespace-nowrap text-sm md:text-base"
+              className="btn-primary whitespace-nowrap text-sm md:text-base px-6 border-0"
               asChild
             >
               <Link to="/login">
-                <LogIn size={14} className="mr-1" />
                 Login
               </Link>
             </Button>
@@ -195,14 +188,14 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
         {/* Mobile Menu Button */}
         <motion.button
           whileTap={{ scale: 0.9 }}
-          className="md:hidden p-1.5 sm:p-2 rounded-full hover:bg-black/10 dark:hover:bg-dark-theme-lighter"
+          className="md:hidden p-1.5 sm:p-2 rounded-full hover:bg-white/10"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? (
-            <X size={20} className={cn(isScrolled ? 'text-gray-800 dark:text-gray-200' : 'text-white', overrideTextColor)} />
+            <X size={20} className="text-white" />
           ) : (
-            <Menu size={20} className={cn(isScrolled ? 'text-gray-800 dark:text-gray-200' : 'text-white', overrideTextColor)} />
+            <Menu size={20} className="text-white" />
           )}
         </motion.button>
       </div>
@@ -223,10 +216,10 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
                   <input
                     type="text"
                     placeholder="Search turfs..."
-                    className="w-full pl-8 pr-3 py-1.5 rounded-md bg-gray-100 dark:bg-dark-theme-lighter text-gray-800 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-turf-500 text-sm"
+                    className="w-full pl-8 pr-3 py-1.5 rounded-md bg-pitch-navy-light text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-pitch-teal text-sm border border-white/10"
                   />
                   <Search
-                    className={cn('absolute left-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-gray-400', overrideTextColor)}
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
                   />
                 </div>
               </div>
@@ -244,8 +237,8 @@ const Navbar = ({ onThemeChange, overrideTextColor }: NavbarProps) => {
                     className={cn(
                       'px-4 py-2 sm:py-3 rounded-md flex items-center transition-colors text-sm sm:text-base',
                       location.pathname === link.to || (link.to === '/#testimonials' && location.hash === '#testimonials')
-                        ? 'bg-turf-100 text-turf-800 dark:bg-dark-theme-lighter dark:text-white'
-                        : overrideTextColor || 'hover:bg-gray-100 dark:hover:bg-dark-theme-lighter dark:text-gray-200'
+                        ? 'bg-pitch-teal/20 text-pitch-teal'
+                        : 'text-gray-300 hover:bg-white/5 hover:text-white'
                     )}
                   >
                     {link.label}

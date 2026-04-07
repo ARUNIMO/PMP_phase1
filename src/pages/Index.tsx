@@ -199,7 +199,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-dark-theme-lighter">
+    <div className="min-h-screen flex flex-col bg-pitch-navy text-white font-sans">
       <motion.div style={{ opacity }} className="fixed w-full z-50">
         <Navbar onThemeChange={handleThemeChange} />
       </motion.div>
@@ -207,46 +207,51 @@ const Index = () => {
       <Features />
 
       {/* Featured Turfs */}
-      <section className="py-8 sm:py-16 bg-gray-50 dark:bg-dark-theme-lighter" ref={featuredTurfsRef}>
-        <div className="container px-2 sm:px-4">
+      <section className="py-20 relative overflow-hidden" ref={featuredTurfsRef}>
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-pitch-teal/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="container px-4 sm:px-6 md:px-8 mx-auto relative z-10">
           <motion.div
-            className="flex justify-between items-center mb-12"
+            className="flex justify-between items-end mb-12"
             initial="hidden"
             animate={controls}
             variants={containerVariants}
           >
             <motion.div variants={itemVariants}>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Featured Turfs</h2>
-              <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm sm:text-base">Explore our most popular sports venues in Tamil Nadu</p>
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+                Featured <span className="text-pitch-teal">Turfs</span>
+              </h2>
+              <p className="text-gray-400 mt-3 text-base sm:text-lg max-w-2xl">
+                Explore our most popular and highly-rated sports venues across Tamil Nadu.
+              </p>
             </motion.div>
             <motion.div variants={itemVariants}>
               <Button
                 variant="outline"
-                className="hidden md:flex items-center gap-1 bg-white dark:bg-dark-theme-lightest hover:bg-gray-100 dark:hover:bg-dark-theme transition-all dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base"
+                className="hidden md:flex items-center gap-2 glass-card hover:bg-pitch-teal/10 hover:border-pitch-teal/50 hover:text-pitch-teal transition-all text-white border-white/10 px-6 py-5 rounded-xl font-medium"
                 asChild
               >
                 <Link to="/book-turf">
-                  View All
-                  <ArrowRight size={14} />
+                  View All Turfs
+                  <ArrowRight size={16} />
                 </Link>
               </Button>
             </motion.div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {featuredTurfs.map((turf, index) => (
               <TurfCard key={turf.id} {...turf} index={index} />
             ))}
           </div>
 
           <motion.div
-            className="mt-8 text-center md:hidden"
+            className="mt-10 text-center md:hidden"
             initial="hidden"
             animate={controls}
             variants={containerVariants}
           >
             <motion.div variants={itemVariants}>
-              <Button variant="outline" asChild className="bg-white dark:bg-dark-theme-lightest hover:bg-gray-100 dark:hover:bg-dark-theme transition-all dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base">
+              <Button variant="outline" asChild className="glass-card hover:bg-pitch-teal/10 hover:border-pitch-teal/50 text-white w-full py-6 rounded-xl font-medium">
                 <Link to="/book-turf">View All Turfs</Link>
               </Button>
             </motion.div>
@@ -255,23 +260,24 @@ const Index = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-8 sm:py-16 bg-gray-50 dark:bg-dark-theme-lighter">
-        <div className="container px-2 sm:px-4">
+      <section className="py-20 bg-pitch-navy-light relative overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-pitch-orange/5 rounded-full blur-[150px] pointer-events-none"></div>
+        <div className="container px-4 sm:px-6 md:px-8 mx-auto relative z-10">
           <motion.div
-            className="text-center mb-12"
+            className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">How It Works</h2>
-            <p className="text-gray-600 dark:text-gray-300 mt-2 max-w-xl mx-auto text-sm sm:text-base">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4 text-white">How It Works</h2>
+            <p className="text-gray-400 mt-2 max-w-2xl mx-auto text-base sm:text-lg">
               Booking a sports turf with us is quick and easy. Follow these simple steps.
             </p>
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 z-10"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -280,22 +286,25 @@ const Index = () => {
             {howItWorks.map((step, index) => (
               <motion.div
                 key={index}
-                className="flex flex-col items-center text-center"
+                className="glass-card p-8 rounded-2xl flex flex-col items-center text-center group hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
                 variants={itemVariants}
-                whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
               >
+                <div className="absolute inset-0 bg-gradient-to-br from-pitch-orange/0 to-pitch-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
                 <motion.div
-                  className="bg-white dark:bg-dark-theme-lightest p-4 rounded-full shadow-md mb-4"
-                  whileHover={{
-                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)',
-                    rotate: [0, 5, -5, 0],
-                    transition: { duration: 0.5 },
-                  }}
+                  className="mb-6 p-4 bg-pitch-navy rounded-2xl border border-white/5 group-hover:border-pitch-orange/30 transition-colors shadow-lg"
+                  whileHover={{ scale: 1.05, rotate: 5 }}
                 >
-                  {step.icon}
+                  <div className="text-pitch-orange">
+                    {step.icon}
+                  </div>
                 </motion.div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-900 dark:text-white">{step.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">{step.description}</p>
+                <h3 className="text-xl font-semibold mb-3 text-white">{step.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{step.description}</p>
+                
+                {index < howItWorks.length - 1 && (
+                  <div className="hidden lg:block absolute top-[40%] -right-8 w-16 h-[2px] bg-gradient-to-r from-pitch-orange/50 to-transparent z-0 pointer-events-none"></div>
+                )}
               </motion.div>
             ))}
           </motion.div>
@@ -303,23 +312,23 @@ const Index = () => {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-8 sm:py-16 bg-gray-50 dark:bg-dark-theme-lighter">
-        <div className="container px-2 sm:px-4">
+      <section id="testimonials" className="py-20 relative overflow-hidden">
+        <div className="container px-4 sm:px-6 md:px-8 mx-auto relative z-10">
           <motion.div
-            className="text-center mb-12"
+            className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">What Our Users Say</h2>
-            <p className="text-gray-600 dark:text-gray-300 mt-2 max-w-xl mx-auto text-sm sm:text-base">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-pitch-teal to-pitch-orange">Users Say</span></h2>
+            <p className="text-gray-400 mt-2 max-w-2xl mx-auto text-base sm:text-lg">
               Don't take our word for it – here's what sports enthusiasts in Tamil Nadu have to say about our platform.
             </p>
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 z-10"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -328,20 +337,19 @@ const Index = () => {
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={testimonial.id}
-                className="bg-white dark:bg-dark-theme-lightest p-4 sm:p-6 rounded-xl border border-gray-100 dark:border-gray-600 relative"
+                className="glass-card p-8 rounded-2xl relative group hover:-translate-y-2 transition-all duration-300"
                 variants={itemVariants}
-                whileHover={{ y: -10, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
               >
-                <div className="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 bg-turf-500 text-white w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center">
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-pitch-teal to-pitch-orange rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg ring-4 ring-pitch-navy">
                   "
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 mb-4 italic text-sm sm:text-base">"{testimonial.quote}"</p>
-                <div className="flex items-center justify-between">
+                <p className="text-gray-300 mb-6 italic leading-relaxed pt-2">"{testimonial.quote}"</p>
+                <div className="flex items-center justify-between border-t border-white/5 pt-4">
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</h4>
-                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{testimonial.role}</p>
+                    <h4 className="font-semibold text-white tracking-wide">{testimonial.name}</h4>
+                    <p className="text-xs text-pitch-teal mt-1">{testimonial.role}</p>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-1 bg-white/5 px-3 py-1.5 rounded-full">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star key={i} filled={i < testimonial.rating} />
                     ))}
@@ -354,110 +362,89 @@ const Index = () => {
       </section>
 
       {/* Our Partners - Logo Carousel */}
-    <section className="py-8 sm:py-16 bg-gray-50 dark:bg-dark-theme-lighter">
-      <div className="container px-2 sm:px-4">
-        <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Our Partners</h2>
-          <p className="text-gray-600 dark:text-gray-300 mt-2 max-w-xl mx-auto text-sm sm:text-base">
-            We collaborate with the best turf venues across Tamil Nadu to bring you top-notch sports facilities.
-          </p>
-        </motion.div>
+      <section className="py-16 border-y border-white/5 bg-black/20">
+        <div className="container px-4 mx-auto">
+          <motion.div
+            className="text-center mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h3 className="text-xl font-medium text-gray-400 tracking-wider uppercase text-sm">Trusted by Premier Venues Across Tamil Nadu</h3>
+          </motion.div>
 
-        <div className="overflow-hidden py-6">
-          <div className="flex animate-scroll gap-4">
-            {[...turfLogos, ...turfLogos, ...turfLogos, ...turfLogos].map((turf, index) => (
-              <div
-                key={`${turf.name}-${index}`}
-                className="flex-shrink-0 w-[18vw] h-[18vw] sm:w-[15vw] sm:h-[15vw] max-w-20 max-h-20 sm:max-w-24 sm:max-h-24 bg-white dark:bg-dark-theme-lighter rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300"
-              >
-                <img
-                  src={turf.logoUrl}
-                  alt={`${turf.name} logo`}
-                  className="max-w-[80%] max-h-[80%] object-contain pointer-events-none"
-                />
-              </div>
-            ))}
+          <div className="overflow-hidden relative flex after:content-[''] after:absolute after:top-0 after:right-0 after:w-32 after:h-full after:bg-gradient-to-l after:from-[#0E131F] after:to-transparent before:content-[''] before:absolute before:top-0 before:left-0 before:w-32 before:h-full before:bg-gradient-to-r before:from-[#0E131F] before:to-transparent z-10 py-6">
+            <div className="flex animate-scroll gap-12 sm:gap-20 items-center px-4">
+              {[...turfLogos, ...turfLogos, ...turfLogos].map((turf, index) => (
+                <div
+                  key={`${turf.name}-${index}`}
+                  className="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 bg-white/5 rounded-full p-4 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10 grayscale hover:grayscale-0"
+                >
+                  <img
+                    src={turf.logoUrl}
+                    alt={`${turf.name} logo`}
+                    className="max-w-full max-h-full object-contain mix-blend-screen"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      <style>{`
-        @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(calc(-18vw * ${turfLogos.length}));
-          }
-        }
-
-        .animate-scroll {
-          animation: scroll 30s linear infinite;
-          display: flex;
-          width: calc(18vw * ${turfLogos.length * 4});
-        }
-
-        .animate-scroll:hover {
-          animation-play-state: paused;
-        }
-
-        @media (min-width: 640px) {
-          .animate-scroll {
-            width: calc(15vw * ${turfLogos.length * 4});
-          }
-
+        <style>{`
           @keyframes scroll {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(calc(-15vw * ${turfLogos.length}));
-            }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-250px * ${turfLogos.length})); }
           }
-        }
-      `}</style>
-    </section>
+          .animate-scroll {
+            animation: scroll 40s linear infinite;
+            width: fit-content;
+          }
+          .animate-scroll:hover {
+            animation-play-state: paused;
+          }
+        `}</style>
+      </section>
 
-      {/* CTA */}
-      <section className="py-8 sm:py-16 bg-gradient-to-r from-turf-700 to-sport-700 text-white font-sans">
-        <div className="container px-2 sm:px-4">
+      {/* CTA Box */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="container px-4 mx-auto relative z-10">
           <motion.div
-            className="max-w-md sm:max-w-3xl mx-auto text-center"
-            initial={{ opacity: 0, scale: 0.9 }}
+            className="glass-card rounded-3xl p-10 md:p-16 text-center max-w-5xl mx-auto relative overflow-hidden box-border border-pitch-teal/30"
+            initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Book Your Sports Venue?</h2>
-            <p className="text-base sm:text-lg mb-8 text-white/90">
-              Join thousands of sports enthusiasts across Tamil Nadu who book their perfect playing field with PickMyPitch.
-            </p>
-            <motion.div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            {/* CTA Background Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-pitch-teal/20 via-pitch-navy to-pitch-orange/20 opacity-80"></div>
+            
+            <div className="relative z-20">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight text-white drop-shadow-lg">
+                Ready to Experience the <span className="text-transparent bg-clip-text bg-gradient-to-r from-pitch-teal to-pitch-orange">Digital Arena?</span>
+              </h2>
+              <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Join thousands of sports enthusiasts across Tamil Nadu who book their perfect playing field with PickMyPitch. Secure your spot in seconds.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
-                  size="default"
-                  className="sm:text-lg bg-white dark:bg-dark-theme-lightest text-turf-700 dark:text-turf-300 hover:bg-turf-100 dark:hover:bg-dark-theme font-semibold tracking-wide shadow-lg hover:shadow-glow transition-all duration-300 text-sm sm:text-base"
+                  size="lg"
+                  className="bg-gradient-to-r from-pitch-teal to-pitch-teal/80 hover:from-pitch-teal/90 hover:to-pitch-teal shadow-[0_0_20px_rgba(15,118,110,0.4)] text-white text-lg px-8 py-6 rounded-xl font-semibold border-none transition-all hover:scale-105"
                   asChild
                 >
-                  <Link to="/book-turf">Book Now</Link>
+                  <Link to="/book-turf">Book Your Turf Now</Link>
                 </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
-                  size="default"
-                  className="sm:text-lg dark:bg-dark-theme-lightest text-turf-700 dark:text-turf-300 hover:bg-turf-100 dark:hover:bg-dark-theme font-semibold tracking-wide hover:shadow-glow transition-all duration-300 text-sm sm:text-base"
+                  size="lg"
+                  className="glass-button bg-white/5 border border-white/20 text-white hover:bg-white/10 hover:border-white/30 text-lg px-8 py-6 rounded-xl font-medium transition-all hover:scale-105"
                   asChild
                 >
-                  <Link to="/contact">Contact Us</Link>
+                  <Link to="/contact">Contact Support</Link>
                 </Button>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>

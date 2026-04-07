@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
@@ -57,8 +56,11 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-white pt-16 pb-8">
-      <div className="container">
+    <footer className="bg-[#0E131F] text-white pt-16 pb-8 border-t border-white/5 relative overflow-hidden">
+      {/* Subtle Background Glow */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-pitch-teal/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+      <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
           <motion.div 
             className="md:col-span-5 lg:col-span-4" 
@@ -67,32 +69,32 @@ const Footer = () => {
             whileInView="visible" 
             viewport={{ once: true }}
           >
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-turf-500 to-sport-600 rounded-full flex items-center justify-center">
+            <Link to="/" className="flex items-center gap-2 mb-4 group">
+              <div className="w-10 h-10 bg-gradient-to-br from-pitch-teal to-pitch-orange rounded-xl flex items-center justify-center transform group-hover:-rotate-6 transition-transform shadow-lg shadow-pitch-teal/20">
                 <span className="text-white font-bold text-lg">PP</span>
               </div>
-              <span className="font-bold text-xl tracking-tight">PickMyPitch</span>
+              <span className="font-bold text-xl tracking-tight text-white group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-pitch-orange transition-all duration-300">PickMyPitch</span>
             </Link>
-            <p className="text-gray-400 mb-6">
+            <p className="text-gray-400 mb-6 leading-relaxed">
               Connecting sports enthusiasts with the best turfs across Tamil Nadu. Book your perfect pitch in seconds.
             </p>
             
-            <div className="space-y-3 mb-6">
-              <div className="flex items-start gap-3">
-                <MapPin size={20} className="text-turf-400 mt-1 shrink-0" />
-                <p className="text-gray-400">
+            <div className="space-y-4 mb-8">
+              <div className="flex items-start gap-3 group">
+                <MapPin size={20} className="text-pitch-teal mt-1 shrink-0 group-hover:text-pitch-orange transition-colors" />
+                <p className="text-gray-400 group-hover:text-gray-300 transition-colors">
                   123 Sports Avenue, T. Nagar<br />
                   Chennai 600017<br />
                   Tamil Nadu, India
                 </p>
               </div>
-              <div className="flex items-center gap-3">
-                <Phone size={20} className="text-turf-400 shrink-0" />
-                <p className="text-gray-400">+91 98765 43210</p>
+              <div className="flex items-center gap-3 group">
+                <Phone size={20} className="text-pitch-teal shrink-0 group-hover:text-pitch-orange transition-colors" />
+                <p className="text-gray-400 group-hover:text-gray-300 transition-colors">+91 98765 43210</p>
               </div>
-              <div className="flex items-center gap-3">
-                <Mail size={20} className="text-turf-400 shrink-0" />
-                <p className="text-gray-400">hello@pickmypitch.com</p>
+              <div className="flex items-center gap-3 group">
+                <Mail size={20} className="text-pitch-teal shrink-0 group-hover:text-pitch-orange transition-colors" />
+                <p className="text-gray-400 group-hover:text-gray-300 transition-colors">hello@pickmypitch.com</p>
               </div>
             </div>
             
@@ -103,7 +105,7 @@ const Footer = () => {
                   href={social.path}
                   whileHover={{ y: -3 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-gray-800 hover:bg-turf-800 w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                  className="bg-pitch-navy-light hover:bg-pitch-teal/20 hover:text-pitch-teal w-11 h-11 rounded-xl flex items-center justify-center transition-colors border border-white/5 shadow-sm"
                   aria-label={social.label}
                 >
                   {social.icon}
@@ -113,7 +115,7 @@ const Footer = () => {
           </motion.div>
           
           <div className="md:col-span-7 lg:col-span-8">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:pl-12">
               {footerLinks.map((column, colIndex) => (
                 <motion.div 
                   key={colIndex}
@@ -123,16 +125,17 @@ const Footer = () => {
                   viewport={{ once: true }}
                   transition={{ delay: colIndex * 0.1 }}
                 >
-                  <h3 className="text-lg font-semibold mb-4 border-b border-gray-700 pb-2">
+                  <h3 className="text-lg font-semibold mb-6 border-b border-white/10 pb-3 text-white">
                     {column.title}
                   </h3>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {column.links.map((link, linkIndex) => (
                       <li key={linkIndex}>
                         <Link 
                           to={link.path} 
-                          className="text-gray-400 hover:text-turf-400 transition-colors hover:underline"
+                          className="text-gray-400 hover:text-pitch-teal transition-all duration-300 flex items-center gap-2 group"
                         >
+                          <span className="w-1.5 h-1.5 rounded-full border border-pitch-teal/50 group-hover:bg-pitch-teal transition-colors"></span>
                           {link.label}
                         </Link>
                       </li>
@@ -149,11 +152,11 @@ const Footer = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="border-t border-gray-800 pt-8 mt-8 text-center text-gray-500"
+          className="border-t border-white/10 pt-8 mt-12 text-center text-gray-500 flex flex-col md:flex-row justify-between items-center"
         >
           <p>© {currentYear} PickMyPitch. All rights reserved.</p>
-          <p className="mt-2 text-sm">
-            Serving sports enthusiasts across Tamil Nadu with the best turf booking experience.
+          <p className="mt-4 md:mt-0 text-sm flex items-center gap-1">
+            Built with passion for sports in <span className="text-pitch-teal font-medium">Tamil Nadu</span>.
           </p>
         </motion.div>
       </div>

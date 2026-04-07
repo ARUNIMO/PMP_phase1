@@ -23,10 +23,24 @@ export default {
 				'glow': '0 0 20px 0 rgba(72, 187, 120, 0.5)',
   			},
 			colors: {
+				'pitch-navy': {
+					DEFAULT: '#0E131E', // Dark Navy / Surface layer 0
+					light: '#1A2130',   // Surface layer 1 (Cards, etc.)
+					lightest: '#262F42', // Input fields, hover states
+				},
+				'pitch-teal': {
+					DEFAULT: '#0F766E', // Deep Teal / Primary
+					hover: '#115E59',
+					light: '#2DD4BF', // Tertiary / Cyan
+				},
+				'pitch-orange': {
+					DEFAULT: '#F97316', // Electric Orange / Secondary / CTA
+					hover: '#EA580C',
+				},
 				'dark-theme': {
-					DEFAULT: '#00001a', // Main dark theme color
-          			lighter: '#1a1a2e', // Slightly lighter for contrast (e.g., cards)
-          			lightest: '#33334d',
+					DEFAULT: '#0E131E', // Main dark theme color mapping to Pitch Navy
+          			lighter: '#1A2130',
+          			lightest: '#262F42',
 				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -34,12 +48,12 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					DEFAULT: '#0F766E', // Updated to Deep Teal
+					foreground: '#FFFFFF'
 				},
 				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
+					DEFAULT: '#F97316', // Updated to Electric Orange
+					foreground: '#FFFFFF'
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
@@ -134,7 +148,8 @@ export default {
 			},
             backgroundImage: {
                 'turf-pattern': "url('data:image/svg+xml,%3Csvg width=\"40\" height=\"40\" viewBox=\"0 0 40 40\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"%2322c55e\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"%3E%3Cpath d=\"M0 40L40 0H20L0 20M40 40V20L20 40\"%3E%3C/path%3E%3C/g%3E%3C/svg%3E')",
-                'hero-gradient': 'linear-gradient(90deg, rgba(21,128,61,0.9) 0%, rgba(29,78,216,0.9) 100%)',
+                'hero-gradient': 'linear-gradient(135deg, rgba(15,118,110,0.85) 0%, rgba(14,19,30,0.95) 100%)',
+                'pitch-gradient': 'linear-gradient(to right, #0F766E, #F97316)',
             }
 		}
 	},

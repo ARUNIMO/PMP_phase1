@@ -34,49 +34,52 @@ const haversineDistance = (lat1, lon1, lat2, lon2) => {
   return R * c;
 };
 
-// TurfCard Component
 const TurfCardComponent = ({ name, location, rating, imageUrl, price, sportTypes, id, ownerContact }) => {
   const isRatingBlank = rating === undefined || rating === null || rating === 0;
 
   return (
-    <Card className="overflow-hidden h-full flex flex-col min-h-[350px] transition-transform duration-1000 hover:scale-105 group bg-white dark:bg-dark-theme-lightest border-gray-100 dark:border-gray-600">
+    <div className="relative glass-card rounded-xl overflow-hidden transition-all duration-300 w-full min-h-[350px] flex flex-col group hover:bg-white/5 hover:border-pitch-teal/30 hover:shadow-[0_0_20px_rgba(45,212,191,0.15)]">
       <div className="relative h-56 overflow-hidden">
         <img 
           src={imageUrl} 
           alt={name} 
-          className="w-full h-full object-cover transition-transform duration-1000 delay-1000 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        <div className="absolute top-2 right-2 bg-white dark:bg-dark-theme-lightest px-2 py-1 rounded-full flex items-center">
-          <Star size={14} className="text-yellow-500 fill-yellow-500 mr-1" />
-          <span className={`text-xs font-medium ${isRatingBlank ? 'text-black dark:text-white' : 'text-gray-700 dark:text-gray-200'}`}>
+        <div className="absolute inset-0 bg-gradient-to-t from-pitch-navy via-transparent to-transparent opacity-80" />
+        <div className="absolute top-4 right-4 bg-pitch-navy/70 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+          <Star size={14} className="text-pitch-orange fill-pitch-orange" />
+          <span className={`font-semibold text-sm ${isRatingBlank ? 'text-gray-400' : 'text-white'}`}>
             {rating ?? 'N/A'}
           </span>
         </div>
       </div>
-      <CardContent className="p-3 flex flex-col flex-grow">
-        <h3 className="text-base font-semibold mb-1 text-gray-900 dark:text-white">{name}</h3>
-        <p className="text-gray-500 dark:text-gray-400 text-xs mb-1">{location}</p>
-        <div className="flex justify-between items-center mb-2">
-          <div className="flex flex-wrap gap-1">
+      <div className="p-5 flex-col flex-grow relative z-20 -mt-4">
+        <h3 className="font-bold text-xl mb-1 text-white drop-shadow-md">{name}</h3>
+        <p className="text-gray-400 text-sm mb-3">{location}</p>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+          <div className="flex flex-wrap gap-2">
             {sportTypes.map((sport, index) => (
-              <span key={index} className="bg-turf-50 dark:bg-turf-700 text-turf-700 dark:text-turf-300 px-2 py-0.5 rounded-full text-[10px]">
+              <span key={index} className="text-[10px] font-semibold tracking-wide uppercase bg-pitch-teal/10 border border-pitch-teal/20 text-pitch-teal px-2 py-1 rounded-full">
                 {sport}
               </span>
             ))}
           </div>
-          <div className="flex items-center text-gray-700 dark:text-gray-300">
-            <Phone size={14} className="mr-1 text-turf-600 dark:text-turf-300" />
+          <div className="flex items-center text-gray-400 bg-pitch-navy/50 px-2 py-1 rounded-md border border-white/5">
+            <Phone size={12} className="mr-1.5 text-pitch-teal" />
             <span className="text-xs font-medium">{ownerContact ?? 'N/A'}</span>
           </div>
         </div>
-        <div className="mt-auto flex justify-between items-center">
-          <p className="text-turf-700 dark:text-turf-300 font-bold text-sm">₹{price}/hr</p>
-          <Button variant="outline" size="sm" className="text-xs border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200" asChild>
+        <div className="mt-auto border-t border-white/10 pt-4 flex justify-between items-center">
+          <div className="bg-pitch-navy/80 px-3 py-1.5 rounded-lg border border-white/5 shadow-inner">
+             <p className="text-pitch-teal font-bold text-lg leading-none">₹{price}</p>
+             <p className="text-gray-400 text-[10px] uppercase tracking-wider mt-1">per hour</p>
+          </div>
+          <Button className="rounded-full bg-pitch-teal hover:bg-pitch-teal/90 text-pitch-navy font-bold shadow-[0_0_15px_rgba(45,212,191,0.2)] hover:shadow-[0_0_20px_rgba(45,212,191,0.4)] transition-all duration-300" size="sm" asChild>
             <Link to={`/book-turf/${id}`}>Book Now</Link>
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
@@ -255,62 +258,63 @@ const BookTurf = () => {
             
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
               <div className="lg:col-span-2">
-                <Card className="overflow-hidden bg-white dark:bg-dark-theme-lightest border-gray-100 dark:border-gray-600">
-                  <div className="relative h-56">
+                <div className="glass-card rounded-xl overflow-hidden border border-white/5 shadow-2xl">
+                  <div className="relative h-64 overflow-hidden">
                     <img 
                       src={selectedTurf.imageUrl} 
                       alt={selectedTurf.name} 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                     />
-                    <div className="absolute top-3 right-3 bg-white dark:bg-dark-theme-lightest px-2 py-1 rounded-full flex items-center">
-                      <Star size={16} className="text-yellow-500 fill-yellow-500 mr-1" />
-                      <span className="font-medium text-gray-700 dark:text-gray-200">{selectedTurf.rating ?? 'N/A'}</span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-pitch-navy via-transparent to-transparent opacity-80" />
+                    <div className="absolute top-4 right-4 bg-pitch-navy/70 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full flex items-center shadow-lg">
+                      <Star size={16} className="text-pitch-orange fill-pitch-orange mr-1.5" />
+                      <span className="font-semibold text-white">{selectedTurf.rating ?? 'N/A'}</span>
                     </div>
                   </div>
                   
-                  <CardContent className="p-6">
-                    <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">{selectedTurf.name}</h1>
-                    <div className="flex items-center text-gray-500 dark:text-gray-400 mb-4">
-                      <MapPin size={16} className="mr-1" />
-                      <span>{selectedTurf.location}</span>
+                  <div className="p-6 relative z-10 -mt-6">
+                    <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-md">{selectedTurf.name}</h1>
+                    <div className="flex items-center text-gray-400 mb-6">
+                      <MapPin size={16} className="mr-1.5 text-pitch-teal" />
+                      <span className="text-sm">{selectedTurf.location}</span>
                     </div>
                     
-                    <div className="flex justify-between items-center mb-6">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                       <div className="flex flex-wrap gap-2">
                         {selectedTurf.sportTypes.map((sport, index) => (
                           <span 
                             key={index} 
-                            className="bg-turf-50 dark:bg-turf-700 text-turf-700 dark:text-turf-300 px-3 py-1 rounded-full text-sm"
+                            className="bg-pitch-teal/10 border border-pitch-teal/20 text-pitch-teal px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase"
                           >
                             {sport}
                           </span>
                         ))}
                       </div>
-                      <div className="flex items-center text-gray-700 dark:text-gray-300">
-                        <Phone size={16} className="mr-2 text-turf-600 dark:text-turf-300" />
+                      <div className="flex items-center text-gray-400 bg-pitch-navy/50 px-3 py-1.5 rounded-md border border-white/5">
+                        <Phone size={16} className="mr-2 text-pitch-teal" />
                         <span className="text-sm font-medium">{selectedTurf.ownerContact ?? 'N/A'}</span>
                       </div>
                     </div>
                     
-                    <div className="border-t border-gray-100 dark:border-gray-600 pt-4">
-                      <div className="flex items-center justify-between mb-4">
+                    <div className="border-t border-white/10 pt-6">
+                      <div className="flex items-center justify-between mb-6">
                         <div>
-                          <p className="text-gray-500 dark:text-gray-400">Price per hour</p>
-                          <p className="text-2xl font-bold text-turf-700 dark:text-turf-300">₹{selectedTurf.price}</p>
+                          <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Price per hour</p>
+                          <p className="text-3xl font-bold text-pitch-teal">₹{selectedTurf.price}</p>
                         </div>
-                        <div className="bg-green-50 dark:bg-green-700 text-green-700 dark:text-green-300 px-3 py-1 rounded-full flex items-center">
-                          <Check size={16} className="mr-1" />
+                        <div className="bg-pitch-teal/10 border border-pitch-teal/20 text-pitch-teal px-4 py-2 rounded-lg flex items-center font-medium">
+                          <Check size={18} className="mr-2" />
                           Available
                         </div>
                       </div>
                       
-                      <div className="bg-blue-50 dark:bg-blue-700 text-blue-700 dark:text-blue-300 p-3 rounded-lg flex items-start mb-4">
-                        <Info size={16} className="mr-2 mt-0.5" />
-                        <p className="text-sm">Bookings can be made up to 30 days in advance. Cancellations within 24 hours will incur a fee.</p>
+                      <div className="bg-pitch-navy/50 border border-pitch-teal/20 text-gray-300 p-4 rounded-lg flex items-start">
+                        <Info size={18} className="mr-3 mt-0.5 text-pitch-teal flex-shrink-0" />
+                        <p className="text-sm leading-relaxed">Bookings can be made up to 30 days in advance. Cancellations within <span className="text-white font-medium">24 hours</span> will incur a fee.</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
               
               <div className="lg:col-span-3">
@@ -330,10 +334,11 @@ const BookTurf = () => {
       <Navbar overrideTextColor="text-blue-500" />
       
       <main className="flex-1 pt-20 pb-16">
-        <div className="bg-gradient-to-r from-turf-700/90 to-sport-700/90 py-8 text-white">
-          <div className="container">
-            <h1 className="text-3xl font-bold mb-4">Find and Book Sports Turfs</h1>
-            <p className="max-w-2xl">
+        <div className="bg-gradient-to-b from-pitch-navy to-[#121826] border-b border-white/5 py-12 text-white relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-pitch-teal/20 via-pitch-navy/10 to-transparent"></div>
+          <div className="container relative z-10">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-[0_0_15px_rgba(45,212,191,0.3)]">Find and Book <span className="text-pitch-teal">Sports Turfs</span></h1>
+            <p className="max-w-2xl text-gray-300 text-lg">
               Browse through our collection of premium sports turfs and book your slot 
               for football, cricket, tennis, and more.
             </p>
@@ -342,20 +347,20 @@ const BookTurf = () => {
         
         <div className="container py-8">
           <div className="mb-6 flex flex-col md:flex-row items-center gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
+            <div className="relative flex-1 w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-pitch-teal" size={18} />
               <Input 
                 placeholder="Search by name or location..." 
-                className="pl-10 bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200"
+                className="pl-10 bg-pitch-navy/50 border-white/10 text-white placeholder:text-gray-400 focus-visible:ring-pitch-teal/50 h-11"
                 value={searchQuery}
                 onChange={handleSearch}
               />
             </div>
             
-            <div className="flex gap-2 w-full md:w-auto">
+            <div className="flex flex-wrap gap-2 w-full md:w-auto">
               <Button 
                 variant="outline" 
-                className="flex items-center gap-2 hover:bg-transparent hover:border-transparent hover:text-current"
+                className="flex items-center gap-2 bg-pitch-navy/50 border-white/10 text-white hover:bg-white/10 hover:text-pitch-teal h-11"
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
               >
                 <Filter size={16} />
@@ -363,10 +368,10 @@ const BookTurf = () => {
               </Button>
               
               <Select value={selectedSport} onValueChange={handleSportChange}>
-                <SelectTrigger className="w-[180px] bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                <SelectTrigger className="w-full sm:w-[150px] md:w-[180px] bg-pitch-navy/50 border-white/10 text-white h-11 focus:ring-pitch-teal/50">
                   <SelectValue placeholder="Sport Type" />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                <SelectContent className="bg-pitch-navy border-white/10 text-white">
                   <SelectItem value="all">All Sports</SelectItem>
                   <SelectItem value="Football">Football</SelectItem>
                   <SelectItem value="Cricket">Cricket</SelectItem>
@@ -378,10 +383,10 @@ const BookTurf = () => {
               </Select>
               
               <Select value={selectedCity} onValueChange={handleCityChange}>
-                <SelectTrigger className="w-[180px] bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                <SelectTrigger className="w-full sm:w-[140px] md:w-[150px] bg-pitch-navy/50 border-white/10 text-white h-11 focus:ring-pitch-teal/50">
                   <SelectValue placeholder="Select City" />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                <SelectContent className="bg-pitch-navy border-white/10 text-white">
                   <SelectItem value="all">All Cities</SelectItem>
                   {cities.map((city) => (
                     <SelectItem key={city} value={city}>{city}</SelectItem>
@@ -390,10 +395,10 @@ const BookTurf = () => {
               </Select>
               
               <Select value={sortBy} onValueChange={handleSortChange}>
-                <SelectTrigger className="w-[180px] bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                <SelectTrigger className="w-full sm:w-[150px] md:w-[180px] bg-pitch-navy/50 border-white/10 text-white h-11 focus:ring-pitch-teal/50">
                   <SelectValue placeholder="Sort By" />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-dark-theme-lightest border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200">
+                <SelectContent className="bg-pitch-navy border-white/10 text-white">
                   <SelectItem value="none">Sort By</SelectItem>
                   <SelectItem value="price-asc">Price (Low to High)</SelectItem>
                   <SelectItem value="price-desc">Price (High to Low)</SelectItem>
@@ -403,14 +408,14 @@ const BookTurf = () => {
           </div>
           
           {(searchQuery || selectedSport !== 'all' || sortBy !== 'none' || selectedCity !== 'all') && (
-            <div className="flex items-center gap-2 mb-6">
-              <span className="text-sm text-gray-500 dark:text-gray-400">Active filters:</span>
+            <div className="flex flex-wrap items-center gap-2 mb-6 p-3 bg-pitch-navy/30 border border-white/5 rounded-lg">
+              <span className="text-sm font-medium text-gray-400">Active filters:</span>
               {searchQuery && (
-                <div className="bg-gray-100 dark:bg-dark-theme text-gray-800 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center">
+                <div className="bg-pitch-teal/10 border border-pitch-teal/20 text-pitch-teal text-sm px-3 py-1 rounded-full flex items-center">
                   <span className="mr-2">"{searchQuery}"</span>
                   <button 
                     onClick={() => setSearchQuery('')}
-                    className="ml-1"
+                    className="hover:text-white transition-colors"
                     aria-label="Clear search"
                   >
                     <X size={14} />
@@ -418,11 +423,11 @@ const BookTurf = () => {
                 </div>
               )}
               {selectedSport !== 'all' && (
-                <div className="bg-gray-100 dark:bg-dark-theme text-gray-800 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center">
+                <div className="bg-pitch-teal/10 border border-pitch-teal/20 text-pitch-teal text-sm px-3 py-1 rounded-full flex items-center">
                   <span className="mr-2">Sport: {selectedSport}</span>
                   <button 
                     onClick={() => setSelectedSport('all')}
-                    className="ml-1"
+                    className="hover:text-white transition-colors"
                     aria-label="Clear sport filter"
                   >
                     <X size={14} />
@@ -430,13 +435,13 @@ const BookTurf = () => {
                 </div>
               )}
               {sortBy !== 'none' && (
-                <div className="bg-gray-100 dark:bg-dark-theme text-gray-800 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center">
+                <div className="bg-pitch-teal/10 border border-pitch-teal/20 text-pitch-teal text-sm px-3 py-1 rounded-full flex items-center">
                   <span className="mr-2">
-                    Sort: {sortBy === 'price-asc' ? 'Price (Low to High)' : 'Price (High to Low)'}
+                    Sort: {sortBy === 'price-asc' ? 'Price (Low - High)' : 'Price (High - Low)'}
                   </span>
                   <button 
                     onClick={() => setSortBy('none')}
-                    className="ml-1"
+                    className="hover:text-white transition-colors"
                     aria-label="Clear sort"
                   >
                     <X size={14} />
@@ -444,11 +449,11 @@ const BookTurf = () => {
                 </div>
               )}
               {selectedCity !== 'all' && (
-                <div className="bg-gray-100 dark:bg-dark-theme text-gray-800 dark:text-gray-200 text-sm px-3 py-1 rounded-full flex items-center">
+                <div className="bg-pitch-teal/10 border border-pitch-teal/20 text-pitch-teal text-sm px-3 py-1 rounded-full flex items-center">
                   <span className="mr-2">City: {selectedCity}</span>
                   <button 
                     onClick={() => setSelectedCity('all')}
-                    className="ml-1"
+                    className="hover:text-white transition-colors"
                     aria-label="Clear city filter"
                   >
                     <X size={14} />
@@ -457,9 +462,9 @@ const BookTurf = () => {
               )}
               <button 
                 onClick={clearFilters}
-                className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                className="text-sm font-medium text-pitch-orange hover:text-white transition-colors ml-auto"
               >
-                Clear all
+                Clear all filters
               </button>
             </div>
           )}
@@ -506,65 +511,66 @@ const BookTurf = () => {
                 {currentTurfs.map((turf) => {
                   const isRatingBlank = turf.rating === undefined || turf.rating === null || turf.rating === 0;
                   return (
-                    <Card key={turf.id} className="overflow-hidden flex flex-col sm:flex-row min-h-[200px] transition-transform duration-300 hover:scale-105 group bg-white dark:bg-dark-theme-lightest border-gray-100 dark:border-gray-600">
-                      <div className="relative h-56 sm:h-auto sm:w-1/3 overflow-hidden">
+                    <div key={turf.id} className="relative overflow-hidden flex flex-col sm:flex-row min-h-[200px] transition-all duration-300 hover:scale-[1.02] group glass-card rounded-xl">
+                      <div className="relative h-56 sm:h-auto sm:w-1/3 sm:min-w-[250px] overflow-hidden">
                         <img 
                           src={turf.imageUrl} 
                           alt={turf.name} 
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute top-2 right-2 bg-white dark:bg-dark-theme-lightest px-2 py-1 rounded-full flex items-center">
-                          <Star size={14} className="text-yellow-500 fill-yellow-500 mr-1" />
-                          <span className={`text-xs font-medium ${isRatingBlank ? 'text-black dark:text-white' : 'text-gray-700 dark:text-gray-200'}`} aria-label="Rating">
+                        <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-pitch-navy via-transparent to-transparent opacity-80" />
+                        <div className="absolute top-4 right-4 bg-pitch-navy/70 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                          <Star size={14} className="text-pitch-orange fill-pitch-orange" />
+                          <span className={`font-semibold text-sm ${isRatingBlank ? 'text-gray-400' : 'text-white'}`}>
                             {turf.rating ?? 'N/A'}
                           </span>
                         </div>
                       </div>
-                      <div className="p-3 sm:p-4 flex-1 flex flex-col">
+                      <div className="p-5 flex-1 flex flex-col relative z-20 bg-pitch-navy/40 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none">
                         <div className="flex-grow">
                           <div className="flex justify-between items-start mb-2">
                             <div>
-                              <h3 className="font-semibold text-lg truncate text-gray-900 dark:text-white">{turf.name}</h3>
-                              <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-                                <MapPin size={14} className="mr-1" />
+                              <h3 className="font-bold text-2xl truncate text-white drop-shadow-md">{turf.name}</h3>
+                              <div className="flex items-center text-sm text-gray-400 mt-1">
+                                <MapPin size={14} className="mr-1 text-pitch-teal" />
                                 <span>{turf.location}</span>
                               </div>
                             </div>
                           </div>
-                          <div className="flex justify-between items-center mt-2">
-                            <div className="flex flex-wrap gap-1">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 gap-3">
+                            <div className="flex flex-wrap gap-2">
                               {turf.sportTypes.map((sport, index) => (
                                 <span 
                                   key={index} 
-                                  className="text-[10px] bg-turf-50 dark:bg-turf-700 text-turf-700 dark:text-turf-300 px-2 py-0.5 rounded-full"
+                                  className="text-[10px] font-semibold tracking-wide uppercase bg-pitch-teal/10 border border-pitch-teal/20 text-pitch-teal px-2 py-1 rounded-full"
                                 >
                                   {sport}
                                 </span>
                               ))}
                             </div>
-                            <div className="flex items-center text-gray-700 dark:text-gray-300">
-                              <Phone size={14} className="mr-1 text-turf-600 dark:text-turf-300" />
+                            <div className="flex items-center text-gray-400 bg-pitch-navy/50 px-2 py-1 rounded-md border border-white/5 w-fit">
+                              <Phone size={14} className="mr-1.5 text-pitch-teal" />
                               <span className="text-xs font-medium">{turf.ownerContact ?? 'N/A'}</span>
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center justify-between mt-4">
-                          <div>
-                            <p className="text-turf-700 dark:text-turf-300 font-bold text-lg">₹{turf.price}</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-sm">per hour</p>
+                        <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/10">
+                          <div className="bg-pitch-navy/80 px-4 py-2 rounded-lg border border-white/5 shadow-inner">
+                            <p className="text-pitch-teal font-bold text-xl leading-none">₹{turf.price}</p>
+                            <p className="text-gray-400 text-[10px] uppercase tracking-wider mt-1">per hour</p>
                           </div>
                           <Button 
-                            className="flex items-center gap-1 text-xs bg-turf-600 dark:bg-turf-700 hover:bg-turf-700 dark:hover:bg-turf-600 text-white" 
+                            className="rounded-full bg-pitch-teal hover:bg-pitch-teal/90 text-pitch-navy font-bold shadow-[0_0_15px_rgba(45,212,191,0.2)] hover:shadow-[0_0_20px_rgba(45,212,191,0.4)] transition-all duration-300" 
                             asChild
                           >
                             <Link to={`/book-turf/${turf.id}`}>
-                              Book Now
-                              <ArrowRight size={14} className="ml-1" />
+                              Book Turf
+                              <ArrowRight size={16} className="ml-2" />
                             </Link>
                           </Button>
                         </div>
                       </div>
-                    </Card>
+                    </div>
                   );
                 })}
               </div>

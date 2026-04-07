@@ -37,33 +37,33 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 36% 9%; /* Mapped to #0E131E */
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 220 29% 14%; /* Mapped to #1A2130 */
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 220 29% 14%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 142 70% 45%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 175 77% 26%; /* Mapped to #0F766E */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 221 83% 53%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 25 95% 53%; /* Mapped to #F97316 */
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 142 70% 45%;
+    --accent: 175 77% 26%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 220 29% 14%; 
+    --input: 220 29% 14%;
+    --ring: 175 77% 26%;
   }
 }
 
@@ -83,7 +83,7 @@
 
 @layer components {
   .hero-gradient {
-    @apply bg-gradient-to-r from-turf-700/90 to-sport-700/90;
+    @apply bg-hero-gradient;
   }
   
   .section-padding {
@@ -91,7 +91,7 @@
   }
 
   .turf-card {
-    @apply bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden;
+    @apply bg-pitch-navy-light rounded-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden relative isolate hover:shadow-2xl hover:shadow-pitch-teal/20;
   }
 
   .animated-link {
@@ -111,7 +111,7 @@
   }
   
   .btn-primary {
-    @apply bg-gradient-to-r from-turf-600 to-sport-600 hover:from-turf-700 hover:to-sport-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105;
+    @apply bg-pitch-teal hover:bg-pitch-teal-hover text-white shadow-lg shadow-pitch-teal/20 hover:shadow-pitch-teal/40 transition-all duration-300 transform hover:-translate-y-0.5 rounded-lg font-medium;
   }
   
   .btn-outline {
@@ -119,7 +119,7 @@
   }
   
   .glass-card {
-    @apply backdrop-blur-lg bg-white/10 border border-white/20 shadow-lg;
+    @apply backdrop-blur-xl bg-pitch-navy/60 border border-white/5 shadow-2xl;
   }
   
   .pulse-animation {
